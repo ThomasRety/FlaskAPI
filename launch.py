@@ -10,34 +10,20 @@ app = Flask(__name__)
 
 app.config.from_object(__name__)
 
-doc = "ID interdit = 404, img interdite = patate, /id/<int:ide>/?img=patate"
+db = 'sql/test_login.db'
+doc = 'test'
 
-def connect_database(db):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
-    return (cursor)
+conn = sqlite3.connect(db)
+c = conn.cursor()
 
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'db.db'),
+    DATABASE=os.path.join(app.root_path, 'sql/test_login.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='admin'
     ))
 app.config.from_envvar('FLASK_SETINGS', silent=True)
 
-def check(id):
-    if id == 404:
-        return (None)
-    else:
-        return (43)
-
-def check_img(ide, img):
-    if (img == "patate"):
-        return (None)
-    else:
-        return (42)
-
-    
 @app.route('/')
 def hello_world():
     return (doc)
@@ -46,27 +32,32 @@ def hello_world():
 def check_img(name):
     return (name)
 
+@app.route('/create_user/', methods=['POST'])
+def create_user():
+    if (request.method == 'POST'):
+        mail, passw = request.form['adresse%mail'], request.form['password']
+        c.execute('''select name from user where user = '{}' '''.format(mail))
+        if len(c.fetchall()) != 0:
+            return (False)
+        else:
+            #Il n'y as pas de même nom d'user
+            c.execute('''insert into user values ('{}', '{}')''' .format(mail, passw))
+            conn.commit()
+            return (True)
+    else:
+        abort(401)
 
-@app.route('/user/', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
     if (request.method == 'POST'):
-        return ('{} + {}'.format(request.form['username'], request.form['password']))
-    elif (request.method == 'GET'):
-        key = request.args.get('key', '')
-        value = request.args.get('value', '')
-        return (key + ' TESTE ' + value)
-    else:
-        return ('wtf')
-
-
-@app.route('/id/<int:ide>/', methods=['GET'])
-def check_if_this_id(ide):
-    if not check(ide):
-        abort(401)
-    else:
-        img_search = request.args.get('img', '')
-        return (type(img_search))
-        if not check_img(ide, img_search):
-            abort(404)
+        mail, passw = request.form['adresse%mail'], request.form['password']
+        c.execute('''select password from user where user = %''' % mail)
+        result = c.fetchall()
+        if result == passw:
+            return (True)
         else:
-            return ('C\'est valide!')
+            return (False)
+    else:
+        abort(401)
+
+
