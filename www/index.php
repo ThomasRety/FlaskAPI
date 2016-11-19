@@ -9,7 +9,7 @@
         <title>inawood home</title>
 </head>
 <body>
-	<?php include("/pages/header.html"); ?>
+	<?php include("pages/header.html"); ?>
 	<section>
 		<article class="login_index">
 			<form method="POST" action="inscription.php" class="form_login">
