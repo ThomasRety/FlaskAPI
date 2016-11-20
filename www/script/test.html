@@ -1,0 +1,28 @@
+<script>
+	/*
+	var paragraph = document.getElementById('formulaire_inscription');
+    var first = paragraph.firstElementChild;
+    var last = paragraph.lastElementChild ;
+
+	alert(first.nodeName.toLowerCase());
+    alert(last.nodeName.toLowerCase());
+	*/
+
+		function test() 
+		{
+			var newLink = document.createElement('a');
+
+        	newLink.id = 'sdz_link';
+        	newLink.href = '/';
+        	newLink.title = 'Découvrez le Site du Zéro !';
+        	newLink.setAttribute('tabindex', '10');
+
+        	document.getElementById('section').appendChild(newLink);
+
+        	var newLinkText = document.createTextNode("trop bien ca marche :3");
+
+        	newLink.appendChild(newLinkText);
+		}
+
+
+</script>
