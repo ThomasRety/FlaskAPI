@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 	/*
 	var paragraph = document.getElementById('formulaire_inscription');
     var first = paragraph.firstElementChild;
@@ -10,19 +10,49 @@
 
 		function test() 
 		{
-			var newLink = document.createElement('a');
+            
+        	var xhr = new XMLHttpRequest();
+        	xhr.open('POST', '10.0.2.15');
+        	xhr.send("adresse%mail=test.test@test.com&password=test");
+            
 
-        	newLink.id = 'sdz_link';
-        	newLink.href = '/';
-        	newLink.title = 'Découvrez le Site du Zéro !';
-        	newLink.setAttribute('tabindex', '10');
 
-        	document.getElementById('section').appendChild(newLink);
-
-        	var newLinkText = document.createTextNode("trop bien ca marche :3");
-
-        	newLink.appendChild(newLinkText);
 		}
 
+        function print_article() 
+        {
+            var article = document.createElement('ARTICLE');
+            var image_titre = document.createElement('IMG');
+            var image_texte = document.createElement('IMG');
+            var titre = document.createElement('H1');
+            var texte = document.createElement('P');
+            var signature = document.createElement('P');
+            var br = document.createElement('BR');
+            //attribu article
+            article.className = 'article';
+            //attribu des images
+            image_titre.className = 'article_header_image';
+            image_texte.className = 'article_image_flottante';
+            image_titre.src = 'http://pre02.deviantart.net/58da/th/pre/f/2012/152/f/9/f9670254febe3cbc2132a8b1ceaa682d-d51wtmy.jpg';
+            image_texte.src = 'http://orig05.deviantart.net/0ba2/f/2016/312/3/8/pixely_tsuki_by_drawkill-dansl9r.gif';
+            //atribu du titre
+            titre.className = 'article_titre';
+            titre.innerHTML = 'ouverture du site';
+            //attribu du texte
+            texte.className = 'article_texte';
+            texte.innerHTML = "yoooooooooooo c'est le createur du site j'espere qu'il vous plaira comme il me plait ! Bonne continuation bande de petit fou :)";
+            //attribu de la signature
+            signature.className = 'article_signature';
+            signature.innerHTML = "signer : mortifia";
+            //lier les elements avec le dom
+            article.appendChild(image_titre);
+            article.appendChild(titre);
+            article.appendChild(image_texte);
+            article.appendChild(texte);
+            article.appendChild(signature);
+
+            document.getElementById('section').appendChild(article);
+            document.getElementById('section').appendChild(br);
+        }
 
 </script>

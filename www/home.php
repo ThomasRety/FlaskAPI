@@ -14,8 +14,6 @@
 		<?php include("pages/inscription.html"); ?>
 		<?php include("pages/login.html"); ?>
 		<br>
-		<button onclick="test()">ajouté element</button>
-		<br>
 	</section>
 	<?php include("script/test.html"); ?>
 </body>
