@@ -10,14 +10,31 @@
 
 		function test() 
 		{
-            
-        	var xhr = new XMLHttpRequest();
-        	xhr.open('POST', '10.0.2.15');
-        	xhr.send("adresse%mail=test.test@test.com&password=test");
-            
-
+                /*
+                var http = new XMLHttpRequest();
+                http.open('POST', 'http://10.18.207.160:5000/login', true);
+                http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                http.send("adresse%mail=test.test@test.com&password=test"); 
+                */
+                var http = new XMLHttpRequest();
+                http.open('POST', 'http://10.18.207.160:5000/login', true);
+                http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                http.send("adresse%mail=test.test@test.com&password="); 
 
 		}
+
+        function check_login()
+        {
+            var email = document.getElementById('adresse_email');
+            var password = document.getElementById('password');
+
+
+            alert(email.innerHTML);
+            alert(password.innerHTML);
+            var http = new XMLHttpRequest();
+            http.open('POST', 'http://10.18.207.160:5000/login', true);
+            http.send('adresse%mail=' + email + '&password=' + password);
+        }
 
         function print_article() 
         {
