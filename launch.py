@@ -144,7 +144,8 @@ def login():
             result = c.fetchall()
             if result[0][0] == passw:
                 print("Tu EST LOG")
-                return ("valid")
+                f = os.urandom(8)
+                return (f)
             else:
                 return ("echec")
         except IndexError:
