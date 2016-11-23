@@ -22,7 +22,7 @@
             var password_test = password;
 
             var http = new XMLHttpRequest();
-            http.open('POST', 'http://85.169.171.192:5000/login', true);
+            http.open('POST', 'http://10.18.207.160:5000/login', true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send('adresse%mail=' + email + '&password=' + password);
         }
@@ -37,7 +37,7 @@
             if (password1 === password2)
             {
                  var http = new XMLHttpRequest();
-                http.open('POST', 'http://85.169.171.192:5000/create_user/', true);
+                http.open('POST', 'http://10.18.207.160:5000/create_user/', true);
                 http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 http.send('username=' + pseudo +'&adresse%mail=' + email + '&password=' + password1);
             }
