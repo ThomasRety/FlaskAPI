@@ -3,13 +3,14 @@
 #Welcome to the server
 
 from flask import Flask, request, abort
-
+from flask_cors import CORS, cross_origin
 
 
 import os
 import sqlite3
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
+cors = CORS(app, ressources={"/*":{"origins": "*"}})
 
 app.config.from_object(__name__)
 
@@ -35,22 +36,69 @@ def hello_world():
 def check_img(user, ide):
     return (name)
 
+@app.route('/modif_user/')
+def modif_login():
+    if (request.method == 'POST'):
+        mail = request.form['adresse%mail']
+        passw = request.form['password']
+        username = request.form['username']
+        old_mail = request.form['old%mail']
+        old_passw = request.form['old%password']
+        old_username = request.form['old%username']
+        if (len(mail) == 0 or len(passw) == 0 or len(username) == 0):
+            abort(403)
+        f = "select mail from user where user.user = '{}' and password = '{}'".format(old_username, old_passw)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError:
+            abort(403)
+        row = c.fetchall()
+        if (len(row) == 0 or row[0][0] != old_mail):
+            abort(403)
+        f = "update user set user = '{}', mail = '{}', password = '{}' where mail = '{}', password = '{}', user = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError:
+            abort(403)
+        return (201)
+        
+
+
 @app.route('/create_user/', methods=['POST'])
 def create_user():
     if (request.method == 'POST'):
+        print("Request recu", end=' ')
         mail, passw = request.form['adresse%mail'], request.form['password']
         user_name = request.form['username']
-        c.execute('''select user from user where mail = '{}' '''.format(mail))
-#        if len((row = c.fetchall())) != 0:
-#            print(row)
-#            return ("FAUX")
-        c.execute('''select user from user where user.user = '{}' '''.format(user_name))
+        print(mail, '|', passw, '|', user_name)
+        if (len(mail) == 0 or len(passw) == 0 or len(user_name) == 0):
+            abort(403)
+        f = '''select user from user where mail = '{}' '''.format(mail)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError:
+            abort(403)
+        row = c.fetchall()
+        if len((row)) != 0:
+            print("Le mail existe déjà")
+            return ("FAUX")
+        f = '''select user from user where user.user = '{}' '''.format(user_name)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError:
+            abort(403)        
         if len(c.fetchall()) != 0:
+            print("ça existe déja")
             return ("CA EXISTE DEJA")
         else:
             #Il n'y as pas de même nom d'user
-            c.execute('''insert into user values ('{}', '{}', '{}')''' .format(user_name, passw, mail))
+            f = '''insert into user values ('{}', '{}', '{}')''' .format(user_name, passw, mail)
+            try:
+                c.execute(f)
+            except sqlite3.OperationalError:
+                abort(403)
             conn.commit()
+            print("fonctionné")
             return ("Je dois vous prévenir que cela a fonctionné")
     else:
         abort(401)
@@ -83,19 +131,24 @@ def create_obj():
 @app.route('/login', methods=['POST'])
 def login():
     if (request.method == 'POST'):
-        mail, passw = request.form['adresse%mail'], request.form['password']
-        c.execute('''select password from user where mail = '{}' '''.format(mail))
+        mail = request.form['adresse%mail']
+        print("mail = ", mail, end=' ')
+        passw = request.form['password']
+        print("& password = ", passw)
+        f = '''select password from user where mail = '{}' '''.format(mail)
         try:
-            print("mail = ", mail)
-            print("password = ", passw)
+            c.execute(f)
+        except sqlite3.OperationalError:
+            abort(403)
+        try:
             result = c.fetchall()
-            print(result)
             if result[0][0] == passw:
+                print("Tu EST LOG")
                 return ("valid")
             else:
-                return ("not valide")
+                return ("echec")
         except IndexError:
-            return ("not valid")
+            return ("echec")
     else:
         abort(401)
 
