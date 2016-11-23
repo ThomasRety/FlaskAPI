@@ -15,5 +15,9 @@
 		<?php include("pages/login.html"); ?>
 		<br>
 	</section>
-	<?php include("script/test.html"); ?>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="script/javascript_test.js" type="text/javascript"></script>
+	<script src="script/jquery_test.js" type="text/javascript"></script>
+
 </body>
