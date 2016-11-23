@@ -159,7 +159,6 @@
 	.header
 	{
 		background-color: rgb(243,132,41);
-		padding: 10px;
 		border-bottom-color: rgb(255,255,255);
 		margin: 0px;
 	    position: absolute;
@@ -171,6 +170,13 @@
 		border-bottom-right-radius: 0px;
 		border-bottom-style: solid;
 		border-bottom-width: 1px;
+		padding-top: 15px;
+		padding-bottom: 10px;
+	}
+
+	.padding_header
+	{
+		padding-left: 10px;
 	}
 }
 
@@ -204,7 +210,7 @@
 	}
 }
 
-@media (min-width: 625px)
+@media (min-width: 710px)
 {
 	.article
 	{
@@ -259,7 +265,7 @@
 		padding-bottom: 0px;
 		margin: 0px;
 		width: 650px;
-		right: 15px;
+		right: 25px;
 		top: 55px;
 	}
 }

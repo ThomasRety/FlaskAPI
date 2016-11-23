@@ -8,7 +8,13 @@ $(function() {
   		$('#article_log').load('pages/inscription.html');
   	});
 
-   	$('#bouton_login').click(function() {
-  		$('#article_log').load('pages/login.html');
+   	$('#bouton_login').click(function() 
+    {
+        $('#article_log').load('pages/login.html');
   	});
+
+    $('#bouton_modifier').click(function() {
+      $('#article_log').load('pages/modifier.html');
+    });
+
 });

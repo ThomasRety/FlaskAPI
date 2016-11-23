@@ -15,6 +15,13 @@
 
 		}
 
+        function setCookie(sName, sValue) 
+        {
+            var today = new Date(), expires = new Date();
+            expires.setTime(today.getTime() + (7*24*60*60*1000));
+            document.cookie = sName + "=" + encodeURIComponent(sValue) + ";expires=" + expires.toGMTString();
+        }
+
         function check_login()
         {
             var email = document.getElementById('adresse_email').value;
@@ -22,9 +29,21 @@
             var password_test = password;
 
             var http = new XMLHttpRequest();
-            http.open('POST', 'http://localhost:5000/login', true);
+            http.open('POST', 'http://10.18.207.160:5000/login', true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send('adresse%mail=' + email + '&password=' + password);
+            if (http.readyState === 2)
+            {
+                alert(http.responseText);
+            }
+            if (http.readyState === 3)
+            {
+                alert(http.responseText);
+            }
+            if (http.readyState === 4)
+            {
+                alert(http.responseText);
+            }
         }
 
         function check_inscription()
@@ -36,46 +55,24 @@
 
             if (password1 === password2)
             {
-                 var http = new XMLHttpRequest();
-                http.open('POST', 'http://localhost:5000/create_user/', true);
+                var http = new XMLHttpRequest();
+                http.open('POST', 'http://10.18.207.160:5000/create_user/', true);
                 http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 http.send('username=' + pseudo +'&adresse%mail=' + email + '&password=' + password1);
             }
         }
 
-        function print_article() 
+        function check_modification()
         {
-            var article = document.createElement('ARTICLE');
-            var image_titre = document.createElement('IMG');
-            var image_texte = document.createElement('IMG');
-            var titre = document.createElement('H1');
-            var texte = document.createElement('P');
-            var signature = document.createElement('P');
-            var br = document.createElement('BR');
-            //attribu article
-            article.className = 'article';
-            //attribu des images
-            image_titre.className = 'article_header_image';
-            image_texte.className = 'article_image_flottante';
-            image_titre.src = 'http://pre02.deviantart.net/58da/th/pre/f/2012/152/f/9/f9670254febe3cbc2132a8b1ceaa682d-d51wtmy.jpg';
-            image_texte.src = 'http://orig05.deviantart.net/0ba2/f/2016/312/3/8/pixely_tsuki_by_drawkill-dansl9r.gif';
-            //atribu du titre
-            titre.className = 'article_titre';
-            titre.innerHTML = 'ouverture du site';
-            //attribu du texte
-            texte.className = 'article_texte';
-            texte.innerHTML = "yoooooooooooo c'est le createur du site j'espere qu'il vous plaira comme il me plait ! Bonne continuation bande de petit fou :)";
-            //attribu de la signature
-            signature.className = 'article_signature';
-            signature.innerHTML = "signer : mortifia";
-            //lier les elements avec le dom
-            article.appendChild(image_titre);
-            article.appendChild(titre);
-            article.appendChild(image_texte);
-            article.appendChild(texte);
-            article.appendChild(signature);
+            var pseudo = document.getElementById('pseudo').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var new_pseudo = document.getElementById('new_pseudo').value;
+            var new_email = document.getElementById('new_email').value;
+            var new_password = document.getElementById('new_password').value;
 
-            document.getElementById('section').appendChild(article);
-            document.getElementById('section').appendChild(br);
+            var http = new XMLHttpRequest();
+            http.open('POST', 'http://10.18.207.160:5000/modif_user/', true);
+            http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            http.send('old%username=' + pseudo +'&old%mail=' + email + '&old%password=' + password + '&username=' + new_pseudo +'&adresse%mail=' + new_email + '&password=' + new_password);
         }
-

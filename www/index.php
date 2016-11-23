@@ -10,10 +10,11 @@
 </head>
 <body>
 	<?php include("pages/header.html"); ?>
-		<article id="article_log"></article>
-		<article id="test_fonction"></article>
+
 
 	<section id="section">
+		<article id="article_log"></article>
+		<article id="test_fonction"></article>
 	</section>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
