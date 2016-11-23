@@ -36,7 +36,7 @@ def hello_world():
 def check_img(user, ide):
     return (name)
 
-@app.route('/modif_user/')
+@app.route('/modif_user/', methods=['POST'])
 def modif_login():
     if (request.method == 'POST'):
         mail = request.form['adresse%mail']
@@ -45,6 +45,8 @@ def modif_login():
         old_mail = request.form['old%mail']
         old_passw = request.form['old%password']
         old_username = request.form['old%username']
+        if (old_mail == mail and passw == old_passw and old_username == username):
+            abort(403)
         if (len(mail) == 0 or len(passw) == 0 or len(username) == 0):
             abort(403)
         f = "select mail from user where user.user = '{}' and password = '{}'".format(old_username, old_passw)
@@ -55,12 +57,12 @@ def modif_login():
         row = c.fetchall()
         if (len(row) == 0 or row[0][0] != old_mail):
             abort(403)
-        f = "update user set user = '{}', mail = '{}', password = '{}' where mail = '{}', password = '{}', user = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
+        f = "update user set user = '{}', mail = '{}', password = '{}' where mail = '{}' and password = '{}' and user = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
         try:
             c.execute(f)
-        except sqlite3.OperationalError:
+        except:
             abort(403)
-        return (201)
+        return ("201")
         
 
 
