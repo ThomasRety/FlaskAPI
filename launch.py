@@ -29,10 +29,12 @@ app.config.from_envvar('FLASK_SETINGS', silent=True)
 
 ADMIN_TEXT = "ceci va être du HTML"
 
-def do_admin(mail, passw):
+def do_admin(mail, password):
     if (mail == "thomas.rety57@gmail.com" and password == "Tristan"):
+        print("Thomas S'est log")
         return (True)
     elif (mail == "amela57290@gmail.com" and password == "Mortifia"):
+        print("Guillaume s'est log")
         return (True)
     else:
         return (False)
@@ -240,6 +242,7 @@ def get_the_html():
     mail, passw = request.form['adresse%mail'], request.form['password']
     if (do_admin(mail, passw) == False):
         abort(403)
+    print("J'envoie le html")
     return (ADMIN_TEXT)
 
 
