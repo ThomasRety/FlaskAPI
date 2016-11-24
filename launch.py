@@ -27,6 +27,17 @@ app.config.update(dict(
     ))
 app.config.from_envvar('FLASK_SETINGS', silent=True)
 
+ADMIN_TEXT = "ceci va être du HTML"
+
+def do_admin(mail, passw):
+    if (mail == "thomas.rety57@gmail.com" and password == "Tristan"):
+        return (True)
+    elif (mail == "amela57290@gmail.com" and password == "Mortifia"):
+        return (True)
+    else:
+        return (False)
+    
+
 @app.route('/')
 def hello_world():
     return (doc)
@@ -162,6 +173,8 @@ def login():
             token = request.form['token']
             print("& token = ", token)
             t = 1
+        if (do_admin(mail, passw) == True):
+            return ("admin")
         if (t == 0):
             f = '''select password from user where mail = '{}' '''.format(mail)
         else:
@@ -203,9 +216,16 @@ def login():
         abort(401)
 
 
-@app.route('/db', methods=['GET','POST'])
+#=================================================================================================
+#====================================== ADMIN PART ===============================================
+#=================================================================================================
+        
+@app.route('/db', methods=['POST'])
 def get_the_db():
     print('===============================================================\n')
+    mail, passw = request.form['adresse%mail'], request.form['password']
+    if (do_admin(mail, passw) == False):
+        abort(403)
     f = "select * from user"
     c.execute(f)
     row = c.fetchall()
@@ -215,4 +235,25 @@ def get_the_db():
     s = s + "</p>"
     return (s)
 
+@app.route('/get_html', methods=['POST'])
+def get_the_html():
+    mail, passw = request.form['adresse%mail'], request.form['password']
+    if (do_admin(mail, passw) == False):
+        abort(403)
+    return (ADMIN_TEXT)
 
+
+@app.route('/delete/<maile>', methods=['POST'])
+def delete_user(maile):
+    mail, passw = request.form['adresse%mail'], request.form['password']
+    if (do_admin(mail, passw) == False):
+        abort(403)
+    f = "delete from user where mail = '{}'".format(maile)
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        print("Erreur SQL, f = ", f)
+        print("Erreur SQL = ", E)
+        return ("Erreur SQL")
+    conn.commit()
+    return ("Utilisateur % delete" % maile)
