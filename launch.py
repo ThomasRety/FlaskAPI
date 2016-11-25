@@ -1,4 +1,5 @@
 #/usr/bin/python3
+#coding: utf-8
 #IP = 163.5.181.144
 #Welcome to the server
 
@@ -27,7 +28,14 @@ app.config.update(dict(
     ))
 app.config.from_envvar('FLASK_SETINGS', silent=True)
 
-ADMIN_TEXT = "ceci va être du HTML"
+ADMIN_TEXT = ""
+
+def get_script():
+    global ADMIN_TEXT
+    with open('tout.html', 'r') as f:
+        for line in f:
+            ADMIN_TEXT += line
+
 
 def do_admin(mail, password):
     if (mail == "thomas.rety57@gmail.com" and password == "Tristan"):
@@ -43,10 +51,6 @@ def do_admin(mail, password):
 @app.route('/')
 def hello_world():
     return (doc)
-
-@app.route('/<user>/<ide>')
-def check_img(user, ide):
-    return (name)
 
 @app.route('/modif_user/', methods=['POST'])
 def modif_login():
@@ -260,3 +264,9 @@ def delete_user(maile):
         return ("Erreur SQL")
     conn.commit()
     return ("Utilisateur % delete" % maile)
+
+
+
+if __name__ == "__main__":
+    get_script()
+    app.run("0.0.0.0")
