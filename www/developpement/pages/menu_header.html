@@ -1,0 +1,44 @@
+<article id="menu_header_utile" class="menu">
+	<article id="menu_inscription" class="onglet_menu">inscription</article>
+	<article id="onglet_inscription"></article>
+	<article id="menu_login" class="onglet_menu">login</article>
+	<article id="onglet_login"></article>
+	<article id="menu_home" class="onglet_menu">home</article>
+	<article id="onglet_home"></article>
+</article>
+
+<script type="text/javascript">
+	$(function () 
+	{
+		$('#menu_inscription').click(function () 
+		{
+			if (document.getElementById('inscription') !== null) 
+			{
+				$('#inscription').remove();
+			}
+			else
+			{	
+				$('#login').remove();
+				$('#onglet_inscription').load('pages/inscription.html');
+			}
+		});
+
+		$('#menu_login').click(function () 
+		{
+			if (document.getElementById('login') !== null) 
+			{
+				$('#login').remove();
+			}
+			else
+			{	
+				$('#inscription').remove();
+				$('#onglet_login').load('pages/login.html');
+			}
+		});
+
+		$('#menu_home').click(function()
+    	{
+    		location.reload();
+    	});
+	});
+</script>

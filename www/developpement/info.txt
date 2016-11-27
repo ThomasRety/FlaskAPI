@@ -1,0 +1,47 @@
+user
+	nom
+	premon
+	pseudo
+	email
+	date d'inscription
+	date de naissance
+	telephonne
+	code de recuperation 
+	sa question secret
+	sa reponse secret
+	token
+	id
+
+image
+	url
+	categorie
+	privé/publique
+	contenu mature 
+	nom
+	description
+	date de creation
+	id de l'image
+	id du createur
+
+salle
+	id de la salle
+	mot de passe 
+	mon
+	description
+	date de creation
+	nombre de joueurs
+	id du theme
+	id du chat
+
+theme
+	nom
+	description
+	publique / privé
+	contenu mature
+	nombre images
+	liste id image
+
+chat
+	id du chat
+	historique chat
+

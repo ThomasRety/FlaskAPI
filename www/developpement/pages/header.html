@@ -1,0 +1,25 @@
+<article class="header" id="header_home">
+	<article>
+		<!--<strong class="header_texte" id="button_log">log/inscription</strong>-->
+		<img src="img/002.png" class="menu_image" id="boutton_header_recherche">
+		<img src="img/001.png" class="menu_image" id="boutton_header_utile">
+	</article>
+	<article id="menu_header"></article>
+</article>
+
+<script type="text/javascript">
+	$(function () 
+	{
+		$('#boutton_header_utile').click(function () 
+		{
+			if (document.getElementById('menu_header_utile') !== null) 
+			{
+				$('#menu_header_utile').remove();
+			}
+			else
+			{	
+				$('#menu_header').load('pages/menu_header.html');
+			}
+		});
+	});
+</script>
