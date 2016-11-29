@@ -125,7 +125,7 @@ def create_user():
             abort(403)        
         if len(c.fetchall()) != 0:
             print("ça existe déja")
-            return ("Ca existe déjà")
+            return ("errpseudo")
         else:
             #Il n'y as pas de même nom d'user
             f = '''insert into user values ('{}', '{}', '{}', 'None')''' .format(user_name, passw, mail)
@@ -151,16 +151,12 @@ def create_user():
 @app.route('/create_obj/', methods=['POST'])
 def create_obj():
     if (request.method == 'POST'):
-        id_owner = int(request.form['id%owner'])
-        date = request.form['date']
-        description = request.form['description']
-        place = int(request.form['place'])
-        hidden = request.form['hidden']
-        name = request.form['name']
-        c.execute('''insert into obj values ('{}', '{}', '{}', {}, {}, {} '''.format(date, name, description, place, hidden, id_owner))
-        c.execute('''select id from obj where date = '{}', description = '{}', owner = {}, name = '{}' '''.format(date, description, id_owner, name))
-        if len(result = c.fetchall()) == 0:
-            return ("ca a planté")
+        try:
+            adresse = request.form['adresse%mail']
+            token = request.form['token']
+            categorie = int(request.form['categorie'])
+            
+
         else:
             ide = result
             try:
@@ -231,10 +227,20 @@ def login():
         abort(401)
 
 
+@app.route('/get_pseudo/', methods=['POST'])
+def get_pseudo():
+    if (request.method == 'POST'):
+        try:
+            mail = request.form['adresse%mail']
+            token = request.form['token']
+        except:
+            abort(403)
+        
+        
 #=================================================================================================
 #====================================== ADMIN PART ===============================================
 #=================================================================================================
-        
+
 @app.route('/db', methods=['POST'])
 def get_the_db():
     print('===============================================================\n')
@@ -259,7 +265,6 @@ def get_the_html():
         abort(403)
     print("J'envoie le html")
     return (ADMIN_TEXT)
-
 
 @app.route('/delete/<maile>', methods=['POST'])
 def delete_user(maile):
@@ -302,7 +307,39 @@ def delete_the_sql():
     c.execute(f)
     conn.commit()
     return ("done")
-    
+
+@app.route('/filter/0/<user>/', methods=['POST'])
+def get_the_user_with_mail(user):
+    mail, passw = request.form['adresse%mail'], request.form['password']
+    passw = (hashlib.sha512(passw.encode())).hexdigest()
+    if (do_admin(mail, passw) == False):
+        abort(403)
+    f = "select * from user where mail = '{}'".format(user)
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        return (E)
+    row = c.fetchall()
+    s = str(row)
+    return (row)
+
+@app.route('/filter/1/<user>', methods=['POST'])
+def get_the_user_with_user(user):
+mail, passw = request.form['adresse%mail'], request.form['password']
+    passw = (hashlib.sha512(passw.encode())).hexdigest()
+    if (do_admin(mail, passw) == False):
+        abort(403)
+    f = "select * from user where user = '{}'".format(user)
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        return (E)
+    row = c.fetchall()
+    s = str(row)
+    return (row)
+
+@app.route('/')
+
 if __name__ == "__main__":
     get_script()
     app.run("0.0.0.0")
