@@ -158,6 +158,7 @@ def create_obj():
             adresse = request.form['adresse%mail']
             token = request.form['token']
             categorie = int(request.form['categorie'])
+            
         except:
             pass
     else:
@@ -240,7 +241,22 @@ def get_pseudo():
             token = request.form['token']
         except:
             abort(403)
-            
+        f = "select pseudo from user where mail = '{}' and token = '{}'".format(mail, token)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError as E:
+            print("ERREUR {}".format(f))
+            print(E)
+            abort(403)
+        result = c.fetchall()
+        try:
+            pseudo = result[0][0]
+        except IndexError:
+            print("Pseudo inexistant avec adresse mail et token fonctionnel")
+            abort(403)
+        return (pseudo)
+    else:
+        abort(405)
         
         
 #=================================================================================================
