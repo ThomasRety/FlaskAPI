@@ -202,7 +202,7 @@ def login():
                     verif = 0
             if verif == 1:
                 f = str(time.time())
-                a = "udpdate user set token = '{}' where mail = '{}'".format(f, mail)
+                a = "update user set token = '{}' where mail = '{}'".format(f, mail)
                 try:
                     c.execute(a)
                 except sqlite3.OperationalError as E:
@@ -239,7 +239,7 @@ def get_pseudo():
             pseudo = result[0][0]
         except IndexError:
             print(result)
-            print("Pseudo inexistant avec adresse mail et token fonctionnel")
+            print("Pseudo inexistant ou données non bonnes")
             abort(403)
         return (pseudo)
     else:
