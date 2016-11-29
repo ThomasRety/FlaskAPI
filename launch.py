@@ -141,7 +141,7 @@ def create_user():
             conn.commit()
             print("fonctionné")
             f = os.urandom(8)
-            a = "udpdate user set token = '{}' where mail = '{}'".format(f, mail)
+            a = "update user set token = '{}' where mail = '{}'".format(f, mail)
             print("L'user {} as été cée avec le token {}".format(mail, f))
             try:
                 c.execute(a)
