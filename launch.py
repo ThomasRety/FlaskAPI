@@ -75,7 +75,7 @@ def modif_login():
         if (len(mail) == 0 or len(passw) == 0 or len(username) == 0):
             print("Un champs est manquant")
             abort(403)
-        f = "select mail from user where user.user = '{}' and password = '{}'".format(old_username, old_passw)
+        f = "select mail from user where pseudo = '{}' and password = '{}'".format(old_username, old_passw)
         try:
             c.execute(f)
         except sqlite3.OperationalError:
@@ -84,7 +84,7 @@ def modif_login():
         if (len(row) == 0 or row[0][0] != old_mail):
             print("L'adresse mail ne correspond pas au mot de passe")
             return ("errauth")
-        f = "update user set user = '{}', mail = '{}', password = '{}' where mail = '{}' and password = '{}' and user = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
+        f = "update user set pseudo = '{}', mail = '{}', password = '{}' where mail = '{}' and password = '{}' and pseudo = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
         try:
             c.execute(f)
         except:
@@ -105,7 +105,7 @@ def create_user():
         if (len(mail) == 0 or len(passw) == 0 or len(user_name) == 0):
             print("Un des champs est manquant")
             return("Un des champs est manquant")
-        f = '''select user from user where mail = '{}' '''.format(mail)
+        f = '''select pseudo from user where mail = '{}' '''.format(mail)
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
@@ -117,7 +117,7 @@ def create_user():
         if len((row)) != 0:
             print("Le mail existe déjà")
             return ("erremail")
-        f = '''select user from user where user.user = '{}' '''.format(user_name)
+        f = '''select pseudo from user where pseudo = '{}' '''.format(user_name)
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
@@ -240,6 +240,7 @@ def get_pseudo():
             token = request.form['token']
         except:
             abort(403)
+            
         
         
 #=================================================================================================
