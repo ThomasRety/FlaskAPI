@@ -192,8 +192,10 @@ def login():
             f = "select token from user where mail = '{}'".format(mail)
         try:
             c.execute(f)
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as E:
             print("REQUETE = '{}'".format(f))
+            print('')
+            print(E)
             abort(403)
         try:
             verif = 0
