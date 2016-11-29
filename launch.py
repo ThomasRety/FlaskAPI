@@ -10,6 +10,7 @@ import sqlite3
 from werkzeug.utils import secure_filename
 import hashlib
 import time
+import json
 
 app = Flask(__name__)
 cors = CORS(app, ressources={"/*":{"origins": "*"}})
@@ -61,37 +62,21 @@ def hello_world():
 def modif_login():
     if (request.method == 'POST'):
         print('\n===============================================================\n')
-        mail = request.form['adresse%mail']
-        passw = request.form['password']
-        passw = (hashlib.sha512(passw.encode())).hexdigest()
-        username = request.form['username']
-        old_mail = request.form['old%mail']
-        old_passw = request.form['old%password']
-        old_passw = (hashlib.sha512(old_passw.encode())).hexdigest()
-        old_username = request.form['old%username']
-        if (old_mail == mail and passw == old_passw and old_username == username):
-            print("Aucune information n'as été modifiée")
-            return ("errnomodif")
-        if (len(mail) == 0 or len(passw) == 0 or len(username) == 0):
-            print("Un champs est manquant")
-            abort(403)
-        f = "select mail from user where pseudo = '{}' and password = '{}'".format(old_username, old_passw)
         try:
-            c.execute(f)
-        except sqlite3.OperationalError:
-            abort(403)
-        row = c.fetchall()
-        if (len(row) == 0 or row[0][0] != old_mail):
-            print("L'adresse mail ne correspond pas au mot de passe")
-            return ("errauth")
-        f = "update user set pseudo = '{}', mail = '{}', password = '{}' where mail = '{}' and password = '{}' and pseudo = '{}'".format(username, mail, passw, old_mail, old_passw, old_username)
-        try:
-            c.execute(f)
+            mail = request.form['adresse%mail']
+            token = request.form['token']
         except:
+            print("Une des informations n'est pas valide")
             abort(403)
-        return ("201")
+        f = "select * from user where mail = '{}' and token = '{}'".format(mail, token)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError as E:
+            print(E)
+            abort (403)
+        row = c.fetchall()
         
-
+        
 
 @app.route('/create_user/', methods=['POST'])
 def create_user():
@@ -253,6 +238,7 @@ def get_pseudo():
         try:
             pseudo = result[0][0]
         except IndexError:
+            print(result)
             print("Pseudo inexistant avec adresse mail et token fonctionnel")
             abort(403)
         return (pseudo)
