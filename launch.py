@@ -205,8 +205,8 @@ def login():
                 a = "udpdate user set token = '{}' where mail = '{}'".format(f, mail)
                 try:
                     c.execute(a)
-                except sqlite3.OperationalError:
-                    pass
+                except sqlite3.OperationalError as E:
+                    print(E)
                 print("Tu est log avec le token {}".format(f))
                 return (f)
             else:
