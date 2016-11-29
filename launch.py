@@ -325,7 +325,7 @@ def get_the_user_with_mail(user):
 
 @app.route('/filter/1/<user>', methods=['POST'])
 def get_the_user_with_user(user):
-mail, passw = request.form['adresse%mail'], request.form['password']
+    mail, passw = request.form['adresse%mail'], request.form['password']
     passw = (hashlib.sha512(passw.encode())).hexdigest()
     if (do_admin(mail, passw) == False):
         abort(403)
