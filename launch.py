@@ -75,7 +75,7 @@ def modif_login():
             print(E)
             abort (403)
         row = c.fetchall()
-        
+        return (json.dumps(row[0]))
         
 
 @app.route('/create_user/', methods=['POST'])
@@ -239,8 +239,7 @@ def get_pseudo():
             pseudo = result[0][0]
         except IndexError:
             print(result)
-            print("Pseudo inexistant ou données non bonnes")
-            abort(403)
+            return ("echec")
         return (pseudo)
     else:
         abort(405)
