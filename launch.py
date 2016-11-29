@@ -9,7 +9,7 @@ import os
 import sqlite3
 from werkzeug.utils import secure_filename
 import hashlib
-
+import time
 
 app = Flask(__name__)
 cors = CORS(app, ressources={"/*":{"origins": "*"}})
@@ -140,7 +140,7 @@ def create_user():
                 abort(403)
             conn.commit()
             print("fonctionné")
-            f = os.urandom(8)
+            f = str(time.time())
             a = "update user set token = '{}' where mail = '{}'".format(f, mail)
             print("L'user {} as été cée avec le token {}".format(mail, f))
             try:
@@ -216,7 +216,7 @@ def login():
                 else:
                     verif = 0
             if verif == 1:
-                f = os.urandom(8)
+                f = str(time.time())
                 a = "udpdate user set token = '{}' where mail = '{}'".format(f, mail)
                 try:
                     c.execute(a)
