@@ -130,7 +130,7 @@ def create_user():
             return ("errpseudo")
         else:
             #Il n'y as pas de même nom d'user
-            f = '''insert into user values ('{}', '{}', '{}', 'None')''' .format(user_name, passw, mail)
+            f = '''insert into user values ('{}', '{}', '{}', 'NULL', NULL, NULL, NULL, NULL )''' .format(passw, user_name, mail)
             try:
                 c.execute(f)
             except sqlite3.OperationalError as E:
