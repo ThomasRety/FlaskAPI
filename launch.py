@@ -146,7 +146,7 @@ def create_user():
             try:
                 c.execute(a)
             except sqlite3.OperationalError:
-                pass
+                abort(500)
             return (f)
     else:
         abort(401)
