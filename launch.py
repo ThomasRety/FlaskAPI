@@ -108,9 +108,10 @@ def create_user():
         f = '''select user from user where mail = '{}' '''.format(mail)
         try:
             c.execute(f)
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as E:
             print("Erreur SQL")
             print("REQUETE = '{}'".format(f))
+            print(E)
             abort(403)
         row = c.fetchall()
         if len((row)) != 0:
@@ -119,9 +120,10 @@ def create_user():
         f = '''select user from user where user.user = '{}' '''.format(user_name)
         try:
             c.execute(f)
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as E:
             print("ERREUR SQL")
             print("REQUETE = '{}'".format(f))
+            print(E)
             abort(403)        
         if len(c.fetchall()) != 0:
             print("ça existe déja")
@@ -131,9 +133,10 @@ def create_user():
             f = '''insert into user values ('{}', '{}', '{}', 'None')''' .format(user_name, passw, mail)
             try:
                 c.execute(f)
-            except sqlite3.OperationalError:
+            except sqlite3.OperationalError as E:
                 print("Erreur SQL")
                 print("REQUETE = '{}'".format(f))
+                print(E)
                 abort(403)
             conn.commit()
             print("fonctionné")
