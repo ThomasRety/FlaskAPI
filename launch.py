@@ -155,18 +155,18 @@ def create_obj():
             adresse = request.form['adresse%mail']
             token = request.form['token']
             categorie = int(request.form['categorie'])
-            
-
-        else:
-            ide = result
-            try:
-                if not os.path.isdir('./var/{}/'.format(id_owner)):
-                    os.mkdir('./var/{}/'.format(id_owner))
-                f = request.files['the_file']
-                f.save('./var/{}'.format(id_owner) + secure_filename(f.filename))
-                return ("ca a fontionne")
-            except:
-                return ("le document n'as pas été créé")
+        except:
+            pass
+    else:
+        ide = result
+        try:
+            if not os.path.isdir('./var/{}/'.format(id_owner)):
+                os.mkdir('./var/{}/'.format(id_owner))
+            f = request.files['the_file']
+            f.save('./var/{}'.format(id_owner) + secure_filename(f.filename))
+            return ("ca a fontionne")
+        except:
+            return ("le document n'as pas été créé")
                 
 
 @app.route('/login', methods=['POST'])
