@@ -145,8 +145,9 @@ def create_user():
             print("L'user {} as été cée avec le token {}".format(mail, f))
             try:
                 c.execute(a)
-            except sqlite3.OperationalError:
-                abort(500)
+            except sqlite3.OperationalError as E:
+                print(E)
+                abort (404)
             return (f)
     else:
         abort(401)
