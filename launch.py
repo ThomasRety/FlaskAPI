@@ -339,6 +339,8 @@ def get_the_user_with_user(user):
     return (row)
 
 @app.route('/')
+def passe():
+    return ("J'aime la grosse bite")
 
 if __name__ == "__main__":
     get_script()
