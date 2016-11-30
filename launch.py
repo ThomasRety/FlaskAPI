@@ -36,6 +36,31 @@ app.config.from_envvar('FLASK_SETINGS', silent=True)
 
 ADMIN_TEXT = ""
 
+def save_document(f, id_owner):
+    try:
+        if not os.path.isdir('/home/ubuntu/var/{}/'.format(id_owner)):
+            os.mkdir('/home/ubuntu/var/{}/'.format(id_owner))
+        f.save('/home/ubuntu/var/{}'.format(id_owner) + secure_filename(f.filename))
+        return (True)
+    except:
+        return (False)
+
+def get_id_with_mail(adresse):
+    f = "select id from user where mail = '{}'".format(adresse)
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        print("Error on get_id")
+        print(E)
+    row = c.fetchall()
+    if (len(row) == 0):
+        return (False)
+    try:
+        a = row[0][0]
+        return (a)
+    except IndexError:
+        return (False)
+
 def get_script():
     global ADMIN_TEXT
     with open('tout.html', 'r') as f:
@@ -52,7 +77,52 @@ def do_admin(mail, password):
         return (True)
     else:
         return (False)
+
+#======================================================================================
+#=================================== OBJET PART =======================================
+#=====================================================================================
     
+@app.route('/create_obj/', methods=['POST'])
+def create_obj():
+    if (request.method == 'POST'):
+        try:
+            adresse = request.form['adresse%mail']
+            token = request.form['token']
+            categorie = int(request.form['categorie'])
+            mature = int(request.form['mature'])
+            name = request.form['name']
+            description = request.form['description']
+        except:
+            abort(403)
+        id_owner = get_id_with_mail(adresse)
+        if (id_owner == False or _login(adresse, token) is not True):
+            print("Adresse mail non valide")
+            abort(403)
+        try:
+            url = request.form['url']
+        except:
+            try:
+                url = 'NULL'
+                f = request.files['the_file']
+            except:
+                print("Aucun file ou url providé")
+                abort(403)
+        f = "insert into objet(categorie, mature, url, name, description, id_creator) values ({}, {}, '{}'n '{}, '{}', {})".format(categorie, mature, url, name, description, id_owner)
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError as E:
+            print(E)
+            abort (403)
+        if (url == 'NULL'):
+            if (save_document(f, id_owner) == True):
+                return ("OK")
+            return("ECHEC")
+        return ("ECHEC")
+
+
+#====================================================================================
+#===================== USER PART ====================================================
+#====================================================================================
 
 @app.route('/')
 def hello_world():
@@ -115,7 +185,7 @@ def create_user():
             return ("errpseudo")
         else:
             #Il n'y as pas de même nom d'user
-            f = '''insert into user(password, pseudo, mail, token, date_inscription, date_naissance, question_secrete, reponse_secrete, telephone) values ('{}', '{}', '{}', '10', NULL, NULL, NULL, NULL, NULL )''' .format(passw, user_name, mail)
+            f = '''insert into user(password, pseudo, mail, token, date_inscription, date_naissance, question_secrete, reponse_secrete, telephone, ADMIN) values ('{}', '{}', '{}', '10', NULL, NULL, NULL, NULL, NULL, 0 )''' .format(passw, user_name, mail)
             try:
                 c.execute(f)
             except sqlite3.OperationalError as E:
@@ -136,28 +206,6 @@ def create_user():
             return (f)
     else:
         abort(401)
-
-@app.route('/create_obj/', methods=['POST'])
-def create_obj():
-    if (request.method == 'POST'):
-        try:
-            adresse = request.form['adresse%mail']
-            token = request.form['token']
-            categorie = int(request.form['categorie'])
-            
-        except:
-            pass
-    else:
-        ide = result
-        try:
-            if not os.path.isdir('./var/{}/'.format(id_owner)):
-                os.mkdir('./var/{}/'.format(id_owner))
-            f = request.files['the_file']
-            f.save('./var/{}'.format(id_owner) + secure_filename(f.filename))
-            return ("ca a fontionne")
-        except:
-            return ("le document n'as pas été créé")
-                
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -217,6 +265,27 @@ def login():
             return ("echec")
     else:
         abort(401)
+
+def _login(adresse, token):
+    print('\n===============================================================\n')
+    f = "select token from user where mail = '{}'".format(mail)
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        print("REQUETE = '{}'".format(f))
+        print('')
+        print(E)
+        abort(403)
+    try:
+        verif = 0
+        result = c.fetchall()
+        if result[0][0] == token:
+            return (True)
+        else:
+            return (False)
+    except Exception as E:
+        print(E)
+
 
 
 @app.route('/get_pseudo/', methods=['POST'])
