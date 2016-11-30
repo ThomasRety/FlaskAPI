@@ -99,14 +99,11 @@ def create_obj():
             print("Adresse mail non valide")
             abort(403)
         try:
-            url = request.form['url']
+            url = 'NULL'
+            f = request.files['the_file']
         except:
-            try:
-                url = 'NULL'
-                f = request.files['the_file']
-            except:
-                print("Aucun file ou url providé")
-                abort(403)
+            print("Aucun file ou url providé")
+            abort(403)
         f = "insert into objet(categorie, mature, url, name, description, id_creator) values ({}, {}, '{}'n '{}, '{}', {})".format(categorie, mature, url, name, description, id_owner)
         try:
             c.execute(f)
@@ -369,7 +366,7 @@ def get_request():
     try:
         c.execute(f)
     except sqlite3.OperationalError as E:
-        return (E)
+        return (str(E))
     row = c.fetchall()
     s = str(row)
     return (row)
