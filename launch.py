@@ -40,7 +40,10 @@ def save_document(f, id_owner):
     try:
         if not os.path.isdir('/home/ubuntu/var/{}/'.format(id_owner)):
             os.mkdir('/home/ubuntu/var/{}/'.format(id_owner))
+        print("\n FILENAME")
+        print(f.filename)
         f.save('/home/ubuntu/var/{}'.format(id_owner) + secure_filename(f.filename))
+        print("Save effectué")
         return (True)
     except:
         return (False)
@@ -88,13 +91,23 @@ def create_obj():
         try:
             adresse = request.form['adresse%mail']
             token = request.form['token']
-            categorie = int(request.form['categorie'])
-            mature = int(request.form['mature'])
+            categorie = request.form['categorie']
+            mature = request.form['mature']
             name = request.form['name']
             description = request.form['description']
-        except:
+        except Exception as E:
+            print(E)
+            print('===================')
+            print(adresse)
+            print(token)
+            print(categorie)
+            print(mature)
+            print(name)
+            print(description)
+            print('Toutes les données ne sont pas fournies')
             abort(403)
         id_owner = get_id_with_mail(adresse)
+        print(id_owner)
         if (id_owner == False or _login(adresse, token) is not True):
             print("Adresse mail non valide")
             abort(403)
