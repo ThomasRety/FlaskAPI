@@ -89,11 +89,15 @@ def do_admin(mail, password):
 @app.route('/create_objet/', methods=['POST'])
 def create_objet():
     id_owner = 10
-    print(request.files)
+    try:
+        print(request.files)
+    except Exception as E:
+        print(E)
+        abort(400)
     if 'file' not in request.files:
         print("Le fichier n'as pas été envoyé : ")
         return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
-    f = request.files['the_file']
+    f = request.files['file']
     if (save_document(f, id_owner) == True):
         return ("OK")
     print("PENIS")
