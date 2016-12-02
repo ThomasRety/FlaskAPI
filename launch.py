@@ -40,7 +40,8 @@ def save_document(f, id_owner):
     try:
         if not os.path.isdir('/home/ubuntu/var/{}/'.format(str(id_owner))):
             os.mkdir('/home/ubuntu/var/{}/'.format(str(id_owner)))
-        print("\nFILENAME")
+        print('===============================================================')
+        print("FILENAME", end='')
         print(f.filename)
         f.save('/home/ubuntu/var/{}/{}'.format(str(id_owner), secure_filename(f.filename)))
         print("Save effectué")
@@ -284,6 +285,7 @@ def login():
                 except sqlite3.OperationalError as E:
                     print(E)
                 print("Tu est log avec le token {}".format(f))
+                conn.commit()
                 return (f)
             else:
                 print("échec")
