@@ -40,12 +40,13 @@ def save_document(f, id_owner):
     try:
         if not os.path.isdir('/home/ubuntu/var/{}/'.format(str(id_owner))):
             os.mkdir('/home/ubuntu/var/{}/'.format(str(id_owner)))
-        print("\n FILENAME")
+        print("\nFILENAME")
         print(f.filename)
-        f.save('/home/ubuntu/var/{}'.format(str(id_owner)) + secure_filename(f.filename))
+        f.save('/home/ubuntu/var/{}/{}'.format(str(id_owner), secure_filename(f.filename)))
         print("Save effectué")
         return (True)
-    except:
+    except Exception as E:
+        print(E)
         return (False)
 
 def get_id_with_mail(adresse):
@@ -85,13 +86,18 @@ def do_admin(mail, password):
 #=================================== OBJET PART =======================================
 #=====================================================================================
 
-@app.route('/create_objet', methods=['POST'])
+@app.route('/create_objet/', methods=['POST'])
 def create_objet():
     id_owner = 10
+    print(request.files)
+    if 'file' not in request.files:
+        print("Le fichier n'as pas été envoyé : ")
+        return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
     f = request.files['the_file']
     if (save_document(f, id_owner) == True):
         return ("OK")
-    return ("ECHEC")
+    print("PENIS")
+    abort(404)
 
 @app.route('/create_obj/', methods=['POST'])
 def create_obj():
