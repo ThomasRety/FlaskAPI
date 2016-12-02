@@ -89,20 +89,21 @@ def do_admin(mail, password):
 
 @app.route('/create_objet/', methods=['POST'])
 def create_objet():
-    id_owner = 10
-    try:
-        print(request.files)
-    except Exception as E:
-        print(E)
-        abort(400)
     if 'file' not in request.files:
         print("Le fichier n'as pas été envoyé : ")
         return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
     f = request.files['file']
+    mail = request.form['adresse']
+    token = request.form['token']
+    connecte = _login(mail, token)
+    if (connecte != True):
+        print("Vous n'êtes pas connecté")
+        abort(402)
+    id_owner = get_id_with_mail(mail)
     if (save_document(f, id_owner) == True):
         return ("OK")
-    print("PENIS")
-    abort(404)
+    print("Erreur")
+    abort(402)
 
 @app.route('/create_obj/', methods=['POST'])
 def create_obj():
@@ -114,6 +115,8 @@ def create_obj():
             mature = request.form['mature']
             name = request.form['name']
             description = request.form['description']
+            filename = request.form['filename']
+            url = 'NULL'
         except Exception as E:
             print(E)
             print('===================')
@@ -130,23 +133,13 @@ def create_obj():
         if (id_owner == False or _login(adresse, token) is not True):
             print("Adresse mail non valide")
             abort(403)
-        try:
-            url = 'NULL'
-            f = request.files['the_file']
-        except:
-            print("Aucun file ou url providé")
-            abort(403)
         f = "insert into objet(categorie, mature, url, name, description, id_creator) values ({}, {}, '{}'n '{}, '{}', {})".format(categorie, mature, url, name, description, id_owner)
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
             print(E)
             abort (403)
-        if (url == 'NULL'):
-            if (save_document(f, id_owner) == True):
-                return ("OK")
-            return("ECHEC")
-        return ("ECHEC")
+       abort(200)
 
 
 #====================================================================================
