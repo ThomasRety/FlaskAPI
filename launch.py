@@ -40,7 +40,7 @@ def save_document(f, id_owner):
     try:
         f.save('/home/ubuntu/FlaskAPI/media/{}'.format(secure_filename(f.filename)))
         print("Save effectué")
-        f = "insert into image (name, id_owner) values({}, {})".format(secure_filename(f.filename), str(id_owner))
+        f = "insert into image (name, id_owner) values('{}', {})".format(f.filename, str(id_owner))
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
