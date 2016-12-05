@@ -38,13 +38,17 @@ ADMIN_TEXT = ""
 
 def save_document(f, id_owner):
     try:
-        if not os.path.isdir('/home/ubuntu/var/{}/'.format(str(id_owner))):
-            os.mkdir('/home/ubuntu/var/{}/'.format(str(id_owner)))
         print('===============================================================')
         print("FILENAME", end='')
         print(f.filename)
-        f.save('/home/ubuntu/var/{}/{}'.format(str(id_owner), secure_filename(f.filename)))
+        f.save('/home/ubuntu/FlaskAPI/media/{}'.format(secure_filename(f.filename)))
         print("Save effectué")
+        f = "insert into image(name, id_owner) values({}, {})".format(secure_filename(f.filename), str(id_owner))
+        try:
+            c.execute(f)
+        except sqlite3.OperationalError as E:
+            print(E)
+            abort (403)
         return (True)
     except Exception as E:
         print(E)
@@ -143,6 +147,8 @@ def create_obj():
             print(E)
             abort (403)
         abort(200)
+
+
 
 
 #====================================================================================
