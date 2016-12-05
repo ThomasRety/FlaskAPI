@@ -93,8 +93,11 @@ def create_objet():
         print("Le fichier n'as pas été envoyé : ")
         return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
     f = request.files['file']
+    print('File')
     mail = request.form['adresse']
+    print('Adresse mail')
     token = request.form['token']
+    print('token')
     connecte = _login(mail, token)
     if (connecte != True):
         print("Vous n'êtes pas connecté")
@@ -139,7 +142,7 @@ def create_obj():
         except sqlite3.OperationalError as E:
             print(E)
             abort (403)
-       abort(200)
+        abort(200)
 
 
 #====================================================================================
@@ -291,7 +294,7 @@ def login():
 
 def _login(adresse, token):
     print('\n===============================================================\n')
-    f = "select token from user where mail = '{}'".format(mail)
+    f = "select token from user where mail = '{}'".format(adresse)
     try:
         c.execute(f)
     except sqlite3.OperationalError as E:
