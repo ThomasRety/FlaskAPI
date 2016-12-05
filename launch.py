@@ -38,15 +38,13 @@ ADMIN_TEXT = ""
 
 def save_document(f, id_owner):
     try:
-        print('===============================================================')
-        print("FILENAME", end='')
-        print(f.filename)
         f.save('/home/ubuntu/FlaskAPI/media/{}'.format(secure_filename(f.filename)))
         print("Save effectué")
         f = "insert into image(name, id_owner) values({}, {})".format(secure_filename(f.filename), str(id_owner))
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
+            print("REQUETE PLANTE")
             print(E)
             abort (403)
         return (True)
@@ -97,20 +95,17 @@ def create_objet():
         print("Le fichier n'as pas été envoyé : ")
         return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
     f = request.files['file']
-    print('File')
     mail = request.form['adresse']
-    print('Adresse mail')
     token = request.form['token']
-    print('token')
     connecte = _login(mail, token)
     if (connecte != True):
         print("Vous n'êtes pas connecté")
-        abort(402)
+        abort(403)
     id_owner = get_id_with_mail(mail)
     if (save_document(f, id_owner) == True):
         return ("OK")
     print("Erreur")
-    abort(402)
+    abort(403)
 
 @app.route('/create_obj/', methods=['POST'])
 def create_obj():
