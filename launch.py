@@ -59,7 +59,7 @@ def save_document(f, id_owner):
             id = row[0][0]
         except IndexError:
             return (False)
-        f.save("/home/ubuntu/FlaskAPI/media/{}".format(str(id_owner)))
+        f.save("/home/ubuntu/FlaskAPI/media/{}".format(str(id)))
         print("SAVE EFFECTUE")
         return (id)
     except Exception as E:
