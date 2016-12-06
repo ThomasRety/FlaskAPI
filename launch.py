@@ -3,7 +3,7 @@
 #IP = 163.5.181.144
 #Welcome to the server
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_file
 from flask_cors import CORS, cross_origin
 import os
 import sqlite3
@@ -92,9 +92,10 @@ def is_id_image_right(id):
     f = "select * from image where id = {}".format(str(id))
     row = execute_request(f)
     if (row == False):
-        abort(403)
+        return (False)
     if (len(row) == 0):
-        abort(403)
+        return (False)
+    return (True)
         
             
 def do_admin(mail, password):
@@ -166,10 +167,11 @@ def create_obj():
         abort(200)
 
 
-#@app.route('/get_image/<int:id>', methods=['POST'])
-#def get_image(id):
-#    if (is_id_image_right(id)):
-        
+@app.route('/get_image/<int:id>', methods=['POST'])
+def get_image(id):
+    if (is_id_image_right(id) is not False):
+        filename = "/home/ubuntu/FlaskAPI/media/{}".format(str(id))
+        return send_file(filename)
 
 #====================================================================================
 #===================== USER PART ====================================================
