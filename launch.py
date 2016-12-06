@@ -36,18 +36,32 @@ app.config.from_envvar('FLASK_SETINGS', silent=True)
 
 ADMIN_TEXT = ""
 
+def execute_request(f):
+    try:
+        c.execute(f)
+    except sqlite3.OperationalError as E:
+        print("REQUETE PLANTE")
+        print(E)
+        return (False)
+    row = c.fetchall()
+    return (row)
+
 def save_document(f, id_owner):
     try:
-        f.save('/home/ubuntu/FlaskAPI/media/{}'.format(secure_filename(f.filename)))
-        print("Save effectué")
-        f = "insert into image (name, id_owner) values('{}', {})".format(f.filename, str(id_owner))
+        a = "insert into image (name, id_owner) values('{}', {})".format(f.filename, str(id_owner))
+        if (execute_request(a) == False):
+            abort(403)
+        a = "select ID from image where name = '{}' and id_owner = {}".format(f.filename, str(id_owner))
+        row = execute_request(a)
+        if (row == False):
+            abort(403)
         try:
-            c.execute(f)
-        except sqlite3.OperationalError as E:
-            print("REQUETE PLANTE")
-            print(E)
-            abort (403)
-        return (True)
+            id = row[0][0]
+        except IndexError:
+            return (False)
+        f.save("/home/ubuntu/FlaskAPI/media/{}".format(str(id_owner)))
+        print("SAVE EFFECTUE")
+        return (id)
     except Exception as E:
         print(E)
         return (False)
@@ -74,7 +88,15 @@ def get_script():
         for line in f:
             ADMIN_TEXT += line
 
-
+def is_id_image_right(id):
+    f = "select * from image where id = {}".format(str(id))
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    if (len(row) == 0):
+        abort(403)
+        
+            
 def do_admin(mail, password):
     if (mail == "thomas.rety57@gmail.com" and password == passwThomas):
         print("Thomas S'est log")
@@ -92,7 +114,6 @@ def do_admin(mail, password):
 @app.route('/create_objet/', methods=['POST'])
 def create_objet():
     if 'file' not in request.files:
-        print("Le fichier n'as pas été envoyé : ")
         return ("C'EST VIDE LOLLLLLLLLLLLLLLLLLLLLLLL")
     f = request.files['file']
     mail = request.form['adresse']
@@ -102,8 +123,9 @@ def create_objet():
         print("Vous n'êtes pas connecté")
         abort(403)
     id_owner = get_id_with_mail(mail)
-    if (save_document(f, id_owner) == True):
-        return ("OK")
+    id = save_document(f, id_owner) 
+    if (id is not False):
+        return (id)
     print("Erreur")
     abort(403)
 
@@ -144,7 +166,10 @@ def create_obj():
         abort(200)
 
 
-
+@app.route('/get_image/<int:id>', methods=['POST'])
+def get_image(id):
+    if (is_id_image_right(id)):
+        
 
 #====================================================================================
 #===================== USER PART ====================================================
@@ -359,6 +384,15 @@ def get_the_db():
     a = "<p>" + s
     s = a.replace('),', ')<br />')
     s = s + "</p>"
+    s = s + "================================================================ <br />"
+    f = "select * from image"
+    c.execute(f)
+    row = c.fetchall()
+    s = s + str(row)
+    a = "<p>" + s
+    s = a.replace('),', ')<br />')
+    s = s + "</p>"
+    s = s + "================================================================ <br />"
     return (s)
 
 @app.route('/get_html', methods=['POST'])
@@ -399,7 +433,7 @@ def get_request():
         return (str(E))
     row = c.fetchall()
     s = str(row)
-    return (row)
+    return (s)
 
 @app.route('/delete/sql', methods=['POST'])
 def delete_the_sql():
@@ -444,7 +478,7 @@ def get_the_user_with_user(user):
 
 @app.route('/')
 def passe():
-    return ("J'aime la grosse bite")
+    return ("PENIS")
 
 if __name__ == "__main__":
     get_script()
