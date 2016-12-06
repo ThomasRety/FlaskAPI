@@ -166,9 +166,9 @@ def create_obj():
         abort(200)
 
 
-@app.route('/get_image/<int:id>', methods=['POST'])
-def get_image(id):
-    if (is_id_image_right(id)):
+#@app.route('/get_image/<int:id>', methods=['POST'])
+#def get_image(id):
+#    if (is_id_image_right(id)):
         
 
 #====================================================================================
@@ -475,10 +475,6 @@ def get_the_user_with_user(user):
     row = c.fetchall()
     s = str(row)
     return (row)
-
-@app.route('/')
-def passe():
-    return ("PENIS")
 
 if __name__ == "__main__":
     get_script()
