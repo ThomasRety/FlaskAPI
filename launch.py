@@ -61,6 +61,7 @@ def save_document(f, id_owner):
             return (False)
         f.save("/home/ubuntu/FlaskAPI/media/{}".format(str(id)))
         print("SAVE EFFECTUE")
+        conn.commit()
         return (str(id))
     except Exception as E:
         print(E)
