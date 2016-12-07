@@ -435,6 +435,7 @@ def get_request():
         return (str(E))
     row = c.fetchall()
     s = str(row)
+    conn.commit()
     return (s)
 
 @app.route('/delete/sql', methods=['POST'])
