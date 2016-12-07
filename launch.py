@@ -167,7 +167,7 @@ def create_obj():
         abort(200)
 
 
-@app.route('/get_image/<int:id>', methods=['POST'])
+@app.route('/get_image/<int:id>', methods=['GET'])
 def get_image(id):
     if (is_id_image_right(id) is not False):
         filename = "/home/ubuntu/FlaskAPI/media/{}".format(str(id))
