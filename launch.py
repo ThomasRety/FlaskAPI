@@ -152,7 +152,7 @@ def create_obj():
         if (id_owner == False or _login(adresse, token) is not True):
             print("Adresse mail non valide")
             abort(403)
-        f = "insert into objet(categorie, mature, name, description, id_creator, id_image) values ({}, {}, '{}', {}, {}, {})".format(categorie, mature, name, description, id_owner, id_image)
+        f = "insert into objet(categorie, mature, name, description, id_creator, id_image) values ('{}', {}, '{}', {}, {}, {})".format(categorie, mature, name, description, id_owner, id_image)
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
