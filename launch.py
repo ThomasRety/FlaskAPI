@@ -159,7 +159,7 @@ def create_obj():
             print("REQUETE PLANTE", E)
             print("REQUETE = ", f)
             abort (403)
-        abort(200)
+        return("OK")
 
 
 @app.route('/get_image/<int:id>', methods=['GET'])
