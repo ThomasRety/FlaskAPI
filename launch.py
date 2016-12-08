@@ -141,17 +141,9 @@ def create_obj():
             mature = request.form['mature']
             name = request.form['name']
             description = request.form['description']
-            filename = request.form['filename']
-            url = 'NULL'
+            id_image = request.form['id_image']
         except Exception as E:
             print(E)
-            print('===================')
-            print(adresse)
-            print(token)
-            print(categorie)
-            print(mature)
-            print(name)
-            print(description)
             print('Toutes les données ne sont pas fournies')
             abort(403)
         id_owner = get_id_with_mail(adresse)
@@ -159,7 +151,7 @@ def create_obj():
         if (id_owner == False or _login(adresse, token) is not True):
             print("Adresse mail non valide")
             abort(403)
-        f = "insert into objet(categorie, mature, url, name, description, id_creator) values ({}, {}, '{}'n '{}, '{}', {})".format(categorie, mature, url, name, description, id_owner)
+        f = "insert into objet(categorie, mature, name, description, id_creator, id_image) values ({}, {}, '{}'n '{}, '{}', {})".format(categorie, mature, name, description, id_owner, id_image)
         try:
             c.execute(f)
         except sqlite3.OperationalError as E:
@@ -368,6 +360,38 @@ def get_pseudo():
     else:
         abort(405)
         
+#======================================================================================
+#=================================== SALLE PART =======================================
+#======================================================================================
+
+@app.route('/get_salle/', methods=['GET'])
+def get_the_salle():
+    f = "select name from salle"
+    row = execute_request(f)
+    if (len(row) == 0):
+        return ("Il n'y as encore aucune salle crée!! Créez en une")
+    return (str(row))
+
+@app.route('/create_salle', methods=['POST'])
+def create_salle():
+    try:
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+        name = request.form['name']
+        password = request.form['password']
+    except Exception as E:
+        print(E)
+        return(403)
+    log = _login(adresse, token)
+    if (log == False):
+        abort(403)
+    id_owner = get_id_with_mail(adresse)
+    f = "insert into salle(name, password, id_owner) values({}, {}, {})".format(name, password, str(id_owner))
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    print("Salle crée")
+    return ("OK")
         
 #=================================================================================================
 #====================================== ADMIN PART ===============================================
