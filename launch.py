@@ -144,6 +144,7 @@ def create_obj():
             id_image = request.form['id_image']
         except Exception as E:
             print(E)
+            print(adresse, token, categorie, mature, name, description, id_image)
             print('Toutes les données ne sont pas fournies')
             abort(403)
         id_owner = get_id_with_mail(adresse)
