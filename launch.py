@@ -157,6 +157,7 @@ def create_obj():
             c.execute(f)
         except sqlite3.OperationalError as E:
             print("REQUETE PLANTE", E)
+            print("REQUETE = ", f)
             abort (403)
         abort(200)
 
