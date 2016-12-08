@@ -164,7 +164,10 @@ def create_obj():
 def get_image(id):
     if (is_id_image_right(id) is not False):
         filename = "/home/ubuntu/FlaskAPI/media/{}".format(str(id))
-        return send_file(filename)
+        try:
+            return send_file(filename)
+        except Exception as E:
+            abort (403)
 
 #====================================================================================
 #===================== USER PART ====================================================
@@ -392,7 +395,41 @@ def create_salle():
         abort(403)
     print("Salle crée")
     return ("OK")
-        
+
+@app.route('/get_my_salle/', methods=['POST'])
+def get_the_last_salle():
+    try:
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+    except Exception as E:
+        print(E)
+        abort(403)
+    log = _login(adresse, token)
+    if (log == False):
+        abort (403)
+    id_owner = get_id_with_mail(adresse)
+    f = "select id_salle from user where mail = '{}'".format(adresse)
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    if (len(row) == 0):
+        return ("None")
+    else:
+        try:
+            result = row[0][0]
+        except IndexError:
+            print('VIDE')
+            abort (404)
+        return (str(result))
+
+@app.route('/connexion_with_salle', methods=['POST'])
+def connexion_with_salle():
+    try:
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+    except:
+        pass
+    
 #=================================================================================================
 #====================================== ADMIN PART ===============================================
 #=================================================================================================
