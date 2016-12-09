@@ -109,6 +109,8 @@ def do_admin(mail, password):
     else:
         return (False)
 
+
+    
 #======================================================================================
 #=================================== OBJET PART =======================================
 #=====================================================================================
@@ -386,12 +388,13 @@ def create_salle():
         password = request.form['password']
     except Exception as E:
         print(E)
-        return(403)
+        print(adresse, token, name, password)
+        abort(403)
     log = _login(adresse, token)
     if (log == False):
         abort(403)
     id_owner = get_id_with_mail(adresse)
-    f = "insert into salle(name, password, id_owner) values({}, {}, {})".format(name, password, str(id_owner))
+    f = "insert into salle(name, password, id_owner, nb_personne) values({}, {}, {}, 1)".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
         abort(403)
@@ -429,8 +432,57 @@ def connexion_with_salle():
     try:
         adresse = request.form['adresse%mail']
         token = request.form['token']
+        name = request.form['name']
+        password = request.form['password']
     except:
-        pass
+        print("Toutes les données ne sont pas completes")
+        print(adresse, token, name, password)
+        abort(403)
+    log = _login(adresse, token)
+    if (log == False):
+        abort (403)
+    id_owner = get_id_with_mail(adresse)
+    #vérification des mdp
+    f = "select password from salle where name = '{}'".format(name)
+    row = execute_request(f)
+    if (row == False or len(row) == 0):
+        abort (403)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        abort (403)
+    if (result != password):
+        print("Mauvais mot de passe")
+        return ("errpassword")
+    id_salle = get_id_with_name(name)
+    if (id_salle == False):
+        abort (403)
+    result = connexion_id_with_salle(id_owner, id_salle)
+    if (result):
+        return ("OK")
+    abort (403)
+
+def get_id_with_name(name):
+    f = "select idfrom salle where name = '{}'".format(name)
+    row = execute_request(f)
+    if (row == False or len(row) == 0):
+        return (False)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        return (False)
+    return (result)
+
+def connexion_id_with_salle(id_owner, id_salle):
+    f = "update user set salle_id = {} where id = {}".format(str(id_salle), str(id_owner))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    return (True)
+        
+        
     
 #=================================================================================================
 #====================================== ADMIN PART ===============================================
