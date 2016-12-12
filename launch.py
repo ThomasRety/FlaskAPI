@@ -2,6 +2,7 @@
 #coding: utf-8
 #IP = 163.5.181.144
 #Welcome to the server
+#WILKOMMEN
 
 from flask import Flask, request, abort, send_file
 from flask_cors import CORS, cross_origin
