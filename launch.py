@@ -389,6 +389,11 @@ def formatage_row(row):
         s = s[0:len(s) - 1] + ';'
     return (s)
 
+@app.route('/get_info_salle/<int:id_salle>', methods=['GET'])
+def get_info_salle(id_salle):
+    f = "select"
+    return ("OK")
+
 @app.route('/get_salle/', methods=['GET'])
 def get_the_salle():
     f = "select name, nb_personne from salle"
@@ -480,6 +485,27 @@ def connexion_with_salle():
     if (result != password):
         print("Mauvais mot de passe")
         return ("errpassword")
+    id_salle = get_id_with_name(name)
+    if (id_salle == False):
+        abort (403)
+    result = connexion_id_with_salle(id_owner, id_salle)
+    if (result):
+        return ("OK")
+    abort (403)
+
+@app.route('/connexion_tmp', methods=['POST'])
+def connexion_tmp():
+    try:
+        name = request.form['name']
+        adresse = request.form['adresse%mail']
+        token = request.form['token']        
+    except Exception as E:
+        print(E)
+        abort (403)
+    log = _login(adresse, token)
+    if (log == False):
+        abort (403)
+    id_owner = get_id_with_mail(adresse)
     id_salle = get_id_with_name(name)
     if (id_salle == False):
         abort (403)
