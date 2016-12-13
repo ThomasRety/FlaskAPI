@@ -531,6 +531,19 @@ def connexion_id_with_salle(id_owner, id_salle):
     row = execute_request(f)
     if (row == False):
         return (False)
+    f = "select nb_personne from salle where id = {}".format(str(id_salle))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    try:
+        nb = row[0][0]
+    except IndexError as E:
+        print(E)
+        return (False)
+    f = "update salle set nb_personne = {} where id = {}".format(str(nb + 1), str(id_salle))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
     return (True)
 
 @app.route('/get_the_image_back/', methods=['GET'])
