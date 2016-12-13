@@ -164,6 +164,16 @@ def create_obj():
             abort (403)
         return("OK")
 
+@app.route('/get_image_user/<int:id_user', methods=['GET'])
+def get_id_image_with_id_user(id_user):
+    f = "select id from image where id_creator = {}".format(str(id_user))
+    row  =execute_request(f)
+    if (row == False):
+        abort (403)
+    if (len(row) == 0):
+        print("Le créateur {} n'as pas crée d'image".format(str(id_user)))
+    return (formatage_row(row))
+
 @app.route('/get_image/<int:id>', methods=['GET'])
 def get_image(id):
     if (is_id_image_right(id) is not False):
