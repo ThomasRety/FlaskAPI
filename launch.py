@@ -372,13 +372,22 @@ def get_pseudo():
 #=================================== SALLE PART =======================================
 #======================================================================================
 
+def formatage_row(row):
+    s = ""
+    for element in row:
+        for elem in element:
+            s = s + ',' + elem
+        s = s + ';'
+    return (s)
+
 @app.route('/get_salle/', methods=['GET'])
 def get_the_salle():
-    f = "select name from salle"
+    f = "select name, nb_personne from salle"
     row = execute_request(f)
     if (len(row) == 0):
         return ("Il n'y as encore aucune salle crée!! Créez en une")
-    return (str(row))
+    row = formatage_row(row)
+    return (row)
 
 @app.route('/create_salle', methods=['POST'])
 def create_salle():
@@ -395,6 +404,12 @@ def create_salle():
     if (log == False):
         abort(403)
     id_owner = get_id_with_mail(adresse)
+    f = "select name from salle where name = '{}'".format(name)
+    row = execute_request(f)
+    if (row == False):
+        abort (403)
+    if (len(row) != 0):
+        return ("errsalledejaexistante")
     f = "insert into salle(name, password, id_owner, nb_personne) values('{}', '{}', {}, 1)".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
@@ -465,7 +480,7 @@ def connexion_with_salle():
     abort (403)
 
 def get_id_with_name(name):
-    f = "select idfrom salle where name = '{}'".format(name)
+    f = "select id from salle where name = '{}'".format(name)
     row = execute_request(f)
     if (row == False or len(row) == 0):
         return (False)
