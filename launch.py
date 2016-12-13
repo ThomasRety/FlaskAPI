@@ -166,7 +166,7 @@ def create_obj():
 
 @app.route('/get_image_user/<int:id_user>', methods=['GET'])
 def get_id_image_with_id_user(id_user):
-    f = "select id from image where id_creator = {}".format(str(id_user))
+    f = "select id from image where id_owner = {}".format(str(id_user))
     row  =execute_request(f)
     if (row == False):
         abort (403)
