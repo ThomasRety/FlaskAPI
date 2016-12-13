@@ -376,7 +376,7 @@ def formatage_row(row):
     s = ""
     for element in row:
         for elem in element:
-            s = s + ',' + elem
+            s = s + ',' + str(elem)
         s = s + ';'
     return (s)
 
