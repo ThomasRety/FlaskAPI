@@ -532,8 +532,14 @@ def connexion_id_with_salle(id_owner, id_salle):
     if (row == False):
         return (False)
     return (True)
-        
-        
+
+@app.route('/get_the_image_back/', methods=['GET'])
+def get_the_back_image():
+       filename = "/home/ubuntu/FlaskAPI/image_back.jpg"
+        try:
+            return send_file(filename)
+        except Exception as E:
+            abort (403)
     
 #=================================================================================================
 #====================================== ADMIN PART ===============================================
