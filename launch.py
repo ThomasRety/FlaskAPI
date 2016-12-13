@@ -376,7 +376,7 @@ def formatage_row(row):
     for element in row:
         for elem in element:
             s = s + str(elem) + ','
-        s[-1] = ';'
+        s = s[0:len(s) - 1] + ';'
     return (s)
 
 @app.route('/get_salle/', methods=['GET'])
