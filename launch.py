@@ -395,7 +395,7 @@ def create_salle():
     if (log == False):
         abort(403)
     id_owner = get_id_with_mail(adresse)
-    f = "insert into salle(name, password, id_owner, nb_personne) values({}, {}, {}, 1)".format(name, password, str(id_owner))
+    f = "insert into salle(name, password, id_owner, nb_personne) values('{}', '{}', {}, 1)".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
         abort(403)
