@@ -164,7 +164,6 @@ def create_obj():
             abort (403)
         return("OK")
 
-
 @app.route('/get_image/<int:id>', methods=['GET'])
 def get_image(id):
     if (is_id_image_right(id) is not False):
@@ -376,8 +375,8 @@ def formatage_row(row):
     s = ""
     for element in row:
         for elem in element:
-            s = s + ',' + str(elem)
-        s = s + ';'
+            s = s + str(elem) + ','
+        s[-1] = ';'
     return (s)
 
 @app.route('/get_salle/', methods=['GET'])
