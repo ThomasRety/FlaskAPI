@@ -183,7 +183,7 @@ def get_image(id):
         except Exception as E:
             abort (403)
 
-@app.route('/get_library/<name>' , methos=['POST'])
+@app.route('/get_library/<name>' , methods=['POST'])
 def get_my_library(name):
     try:
         pass
