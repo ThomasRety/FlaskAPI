@@ -526,11 +526,7 @@ def get_id_with_name(name):
         return (False)
     return (result)
 
-def connexion_id_with_salle(id_owner, id_salle):
-    f = "update user set salle_id = {} where id = {}".format(str(id_salle), str(id_owner))
-    row = execute_request(f)
-    if (row == False):
-        return (False)
+def get_nb_personne(id_salle):
     f = "select nb_personne from salle where id = {}".format(str(id_salle))
     row = execute_request(f)
     if (row == False):
@@ -539,6 +535,32 @@ def connexion_id_with_salle(id_owner, id_salle):
         nb = row[0][0]
     except IndexError as E:
         print(E)
+        return (False)
+    return (nb)
+
+def connexion_id_with_salle(id_owner, id_salle):
+    f = "select salle_id from user where id = {}".format(str(id_owner))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+        try:
+    id_salle2 = row[0][0]
+    except IndexError as E:
+        print(E)
+        return (False)
+    nb = get_nb_personne(id_salle2)
+    if (nb == False):
+        return (False)
+    f = "update salle set nb_personne = {} where id = {}".format(str(nb - 1), str(id_salle2))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    f = "update user set salle_id = {} where id = {}".format(str(id_salle), str(id_owner))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    nb = get_nb_personne(id_salle)
+    if (nb == False):
         return (False)
     f = "update salle set nb_personne = {} where id = {}".format(str(nb + 1), str(id_salle))
     row = execute_request(f)
