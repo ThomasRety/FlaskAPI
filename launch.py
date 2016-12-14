@@ -504,7 +504,7 @@ def connexion_tmp():
     try:
         name = request.form['name']
         adresse = request.form['adresse%mail']
-        token = request.form['token']        
+        token = request.form['token']
     except Exception as E:
         print(E)
         abort (403)
@@ -514,10 +514,12 @@ def connexion_tmp():
     id_owner = get_id_with_mail(adresse)
     id_salle = get_id_with_name(name)
     if (id_salle == False):
+        print("La salle {} n'existe pas".format(str(id_salle)))
         abort (403)
     result = connexion_id_with_salle(id_owner, id_salle)
     if (result):
         return ("OK")
+    print("L'user {} n'as pas réussi à se connecter a la salle {}".format(str(id_owner), str(id_salle)))
     abort (403)
 
 def get_id_with_name(name):
