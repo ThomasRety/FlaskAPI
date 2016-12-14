@@ -557,16 +557,14 @@ def connexion_id_with_salle(id_owner, id_salle):
     except IndexError as E:
         print(E)
         return (False)
-    print("===========")
-    print(row)
-    print(id_salle2)
-    nb = get_nb_personne(id_salle2)
-    if (nb == False):
-        return (False)
-    f = "update salle set nb_personne = {} where id = {}".format(str(nb - 1), str(id_salle2))
-    row = execute_request(f)
-    if (row == False):
-        return (False)
+    if (id_salle2 != None):
+        nb = get_nb_personne(id_salle2)
+        if (nb == False):
+            return (False)
+        f = "update salle set nb_personne = {} where id = {}".format(str(nb - 1), str(id_salle2))
+        row = execute_request(f)
+        if (row == False):
+            return (False)
     f = "update user set salle_id = {} where id = {}".format(str(id_salle), str(id_owner))
     row = execute_request(f)
     if (row == False):
