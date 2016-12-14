@@ -41,7 +41,7 @@ def execute_request(f):
     try:
         c.execute(f)
     except sqlite3.OperationalError as E:
-        print("REQUETE PLANTE")
+        print("REQUETE PLANTE", f)
         print(E)
         return (False)
     row = c.fetchall()
@@ -183,6 +183,13 @@ def get_image(id):
         except Exception as E:
             abort (403)
 
+@app.route('/get_library/<name>' , methos=['POST'])
+def get_my_library(name):
+    try:
+        pass
+    except:
+        pass
+        
 #====================================================================================
 #===================== USER PART ====================================================
 #====================================================================================
@@ -194,7 +201,6 @@ def hello_world():
 @app.route('/modif_user/', methods=['POST'])
 def modif_login():
     if (request.method == 'POST'):
-        print('\n===============================================================\n')
         try:
             mail = request.form['adresse%mail']
             token = request.form['token']
