@@ -543,8 +543,8 @@ def connexion_id_with_salle(id_owner, id_salle):
     row = execute_request(f)
     if (row == False):
         return (False)
-        try:
-    id_salle2 = row[0][0]
+    try:
+        id_salle2 = row[0][0]
     except IndexError as E:
         print(E)
         return (False)
