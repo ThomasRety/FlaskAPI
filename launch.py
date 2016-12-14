@@ -510,6 +510,7 @@ def connexion_tmp():
         abort (403)
     log = _login(adresse, token)
     if (log == False):
+        print("L'adresse mail {} n'as pas un token valide".format(name))
         abort (403)
     id_owner = get_id_with_mail(adresse)
     id_salle = get_id_with_name(name)
