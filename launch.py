@@ -45,6 +45,7 @@ def execute_request(f):
         print(E)
         return (False)
     row = c.fetchall()
+    c.commit()
     return (row)
 
 def save_document(f, id_owner):
@@ -409,10 +410,15 @@ def formatage_row(row):
         s = s[0:len(s) - 1] + ';'
     return (s)
 
-@app.route('/get_info_salle/<int:id_salle>', methods=['GET'])
-def get_info_salle(id_salle):
-    f = "select"
-    return ("OK")
+@app.route('/get_list_user/<name_salle>', methods=['POST'])
+def get_list_user(name_salle):
+    f = "select id_user from salle where name = '{}'".format(str(name_salle))
+    row = execute_request(f)
+    if (row == False or len(row) == 0):
+        print('row vide', row)
+        abort (403)
+    s = formatage_row(row)
+    return (s)
 
 @app.route('/get_salle/', methods=['GET'])
 def get_the_salle():
@@ -444,10 +450,14 @@ def create_salle():
         abort (403)
     if (len(row) != 0):
         return ("errsalledejaexistante")
-    f = "insert into salle(name, password, id_owner, nb_personne) values('{}', '{}', {}, 1)".format(name, password, str(id_owner))
+    f = "insert into salle(name, password, id_owner, nb_personne) values('{}', '{}', {}, 0)".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
         abort(403)
+    id_salle = get_id_with_name(name)
+    row = connexion_id_with_salle(id_owner, id_salle)
+    if (row == False):
+        abort (403)
     print("Salle crée")
     return ("OK")
 
@@ -590,6 +600,24 @@ def connexion_id_with_salle(id_owner, id_salle):
     row = execute_request(f)
     if (row == False):
         return (False)
+    f = "select id_user where from salle where id = {}".format(str(id_salle))
+    row = execute_request(f)
+    if (row == False or len(row) == 0):
+        return (False)
+    try:
+        s = row[0][0]
+    except IndexError as E:
+        print(E)
+        abort (403)
+    if s == "":
+        s = s + str(id_owner)
+    else:
+        s = s + ',' + str(id_owner)
+    f = "update salle set id_user = '{}' where id = {}".format(str(s), str(id_salle))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    c.commit()
     return (True)
 
 @app.route('/get_the_image_back/', methods=['GET'])
