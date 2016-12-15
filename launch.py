@@ -186,9 +186,22 @@ def get_image(id):
 @app.route('/get_library/<name>' , methods=['POST'])
 def get_my_library(name):
     try:
-        pass
-    except:
-        pass
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+    except Exception as E:
+        print(E)
+        abort(403)
+    _log = _login(adresse, token)
+    if (!_log):
+        print("L'adresse mail {} n'as pas un token valide".format(adresse))
+        abort (403)
+    f = "select id_image from objet where categorie = '{}'".format(name)
+    row = execute_request(f)
+    if (!row):
+        abort(403)
+    s = formatage_row(row)
+    print(categorie, s)
+    return (s)
         
 #====================================================================================
 #===================== USER PART ====================================================
