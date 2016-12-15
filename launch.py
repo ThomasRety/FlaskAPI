@@ -45,7 +45,7 @@ def execute_request(f):
         print(E)
         return (False)
     row = c.fetchall()
-    c.commit()
+    conn.commit()
     return (row)
 
 def save_document(f, id_owner):
@@ -617,7 +617,7 @@ def connexion_id_with_salle(id_owner, id_salle):
     row = execute_request(f)
     if (row == False):
         return (False)
-    c.commit()
+    conn.commit()
     return (True)
 
 @app.route('/get_the_image_back/', methods=['GET'])
