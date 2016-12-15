@@ -626,6 +626,14 @@ def get_the_db():
     s = a.replace('),', ')<br />')
     s = s + "</p>"
     s = s + "================================================================ <br />"
+    f = "select * from objet"
+    c.execute(f)
+    row = c.fetchall()
+    s = s + str(row)
+    a = "<p>" + s
+    s = a.replace('),', ')<br />')
+    s = s + "</p>"
+    s = s + "================================================================ <br />"
     return (s)
 
 @app.route('/get_html', methods=['POST'])
