@@ -580,7 +580,6 @@ def connexion_id_with_salle(id_owner, id_salle):
         id_salle2 = row[0][0]
     except IndexError as E:
         print(E)
-        return (False)
     if (id_salle2 != None):
         nb = get_nb_personne(id_salle2)
         if (nb == False):
