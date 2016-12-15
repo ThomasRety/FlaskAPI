@@ -235,12 +235,9 @@ def modif_login():
 @app.route('/create_user/', methods=['POST'])
 def create_user():
     if (request.method == 'POST'):
-        print('\n===============================================================\n')
-        print("Request recu", end=' ')
         mail, passw = request.form['adresse%mail'], request.form['password']
         passw = (hashlib.sha512(passw.encode())).hexdigest()
         user_name = request.form['username']
-        print(mail, '|', passw, '|', user_name)
         if (len(mail) == 0 or len(passw) == 0 or len(user_name) == 0):
             print("Un des champs est manquant")
             return("Un des champs est manquant")
@@ -352,7 +349,6 @@ def login():
         abort(401)
 
 def _login(adresse, token):
-    print('\n===============================================================\n')
     f = "select token from user where mail = '{}'".format(adresse)
     try:
         c.execute(f)
@@ -442,21 +438,25 @@ def create_salle():
         abort(403)
     log = _login(adresse, token)
     if (log == False):
+        print("Tu n'est pas log")
         abort(403)
     id_owner = get_id_with_mail(adresse)
     f = "select name from salle where name = '{}'".format(name)
     row = execute_request(f)
     if (row == False):
+        print("Row = False, f = ", f)
         abort (403)
     if (len(row) != 0):
         return ("errsalledejaexistante")
     f = "insert into salle(name, password, id_owner, nb_personne, id_user) values('{}', '{}', {}, 0, '')".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
+        print("Row = False, f = ", f)
         abort(403)
     id_salle = get_id_with_name(name)
     row = connexion_id_with_salle(id_owner, id_salle)
     if (row == False):
+        print("Row = False, connexion_id_with_salle" )
         abort (403)
     print("Salle crée")
     return ("OK")
@@ -562,51 +562,62 @@ def get_id_with_name(name):
 def get_nb_personne(id_salle):
     f = "select nb_personne from salle where id = {}".format(str(id_salle))
     row = execute_request(f)
-    if (row == False):
-        return (False)
+    print(row)
     try:
         nb = row[0][0]
     except IndexError as E:
-        print(E)
-        return (False)
+        print(E, "GET NB PERSONNE, ROW = ", row)
+        return (-84)
     return (nb)
 
 def connexion_id_with_salle(id_owner, id_salle):
     f = "select salle_id from user where id = {}".format(str(id_owner))
     row = execute_request(f)
     if (row == False):
+        print("row = False, f = ", f)
         return (False)
     try:
+        #On get la salle de l'user
         id_salle2 = row[0][0]
     except IndexError as E:
-        print(E)
+        print(E, "ID_salle2, row = ", row)
     if (id_salle2 != None):
+        #SI l'uttilisateur s'est deja connecté on update son ancienne salle
         nb = get_nb_personne(id_salle2)
-        if (nb == False):
+        if (nb == -84):
+            print("Impossible de get le nombre de personne de ancienne salle")
             return (False)
         f = "update salle set nb_personne = {} where id = {}".format(str(nb - 1), str(id_salle2))
         row = execute_request(f)
         if (row == False):
+            print("Update ancienne salle set nb_personne = nb -1, row = False")
             return (False)
+    #On set la salle_id de l'user pour la prochaine fois
     f = "update user set salle_id = {} where id = {}".format(str(id_salle), str(id_owner))
     row = execute_request(f)
     if (row == False):
+        print("row = False, f = ", f)
         return (False)
     nb = get_nb_personne(id_salle)
-    if (nb == False):
+    if (nb == -84):
+        print("nb = False, get_nb_personne(", str(id_salle), ")")
         return (False)
+    #on incrémente le nb de personne de la salle
     f = "update salle set nb_personne = {} where id = {}".format(str(nb + 1), str(id_salle))
     row = execute_request(f)
     if (row == False):
+        print("row = False, f = ", f)
         return (False)
+    #On incrémente les users présent dans la salle
     f = "select id_user from salle where id = {}".format(str(id_salle))
     row = execute_request(f)
     if (row == False or len(row) == 0):
+        print("row = False, f = ", f)
         return (False)
     try:
         s = row[0][0]
     except IndexError as E:
-        print(E)
+        print(E, "select des id_user de la salle , row = ", row)
         abort (403)
     if s == "":
         s = s + str(id_owner)
@@ -615,6 +626,7 @@ def connexion_id_with_salle(id_owner, id_salle):
     f = "update salle set id_user = '{}' where id = {}".format(str(s), str(id_salle))
     row = execute_request(f)
     if (row == False):
+        print("row = False, f = ", f)
         return (False)
     conn.commit()
     return (True)
