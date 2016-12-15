@@ -192,12 +192,12 @@ def get_my_library(name):
         print(E)
         abort(403)
     _log = _login(adresse, token)
-    if (!_log):
+    if (_log is not True):
         print("L'adresse mail {} n'as pas un token valide".format(adresse))
         abort (403)
     f = "select id_image from objet where categorie = '{}'".format(name)
     row = execute_request(f)
-    if (!row):
+    if (row is not True):
         abort(403)
     s = formatage_row(row)
     print(categorie, s)
