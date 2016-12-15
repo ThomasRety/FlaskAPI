@@ -197,7 +197,7 @@ def get_my_library(name):
         abort (403)
     f = "select id_image from objet where categorie = '{}'".format(name)
     row = execute_request(f)
-    if (row is not True):
+    if (len(row) == 0):
         print("ROW EST VIDE", row)
         abort(403)
     s = formatage_row(row)
