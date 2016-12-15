@@ -450,7 +450,7 @@ def create_salle():
         abort (403)
     if (len(row) != 0):
         return ("errsalledejaexistante")
-    f = "insert into salle(name, password, id_owner, nb_personne) values('{}', '{}', {}, 0)".format(name, password, str(id_owner))
+    f = "insert into salle(name, password, id_owner, nb_personne, id_user) values('{}', '{}', {}, 0, '')".format(name, password, str(id_owner))
     row = execute_request(f)
     if (row == False):
         abort(403)
