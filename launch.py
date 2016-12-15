@@ -485,8 +485,20 @@ def get_the_last_salle():
         except IndexError:
             print('VIDE')
             abort (404)
-        return (str(result))
-
+    f = "select name from salle where id = {}".format(str(result))
+    row = execute_request(f)
+    if (row == False):
+        return ("None")
+    if (len(row) == 0):
+        return ("None")
+    else:
+        try:
+            result = row[0][0]
+        except IndexError:
+            print('VIDE')
+            abort (404)
+            return (str(result))
+        
 @app.route('/connexion_with_salle', methods=['POST'])
 def connexion_with_salle():
     try:
