@@ -201,7 +201,7 @@ def get_my_library(name):
         print("ROW EST VIDE", row)
         abort(403)
     s = formatage_row(row)
-    print(categorie, s)
+    print(name, s)
     return (s)
         
 #====================================================================================
