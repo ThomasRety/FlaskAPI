@@ -600,7 +600,7 @@ def connexion_id_with_salle(id_owner, id_salle):
     row = execute_request(f)
     if (row == False):
         return (False)
-    f = "select id_user where from salle where id = {}".format(str(id_salle))
+    f = "select id_user from salle where id = {}".format(str(id_salle))
     row = execute_request(f)
     if (row == False or len(row) == 0):
         return (False)
