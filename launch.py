@@ -356,7 +356,7 @@ def _login(adresse, token):
         print("REQUETE = '{}'".format(f))
         print('')
         print(E)
-        abort(403)
+        return (False)
     try:
         verif = 0
         result = c.fetchall()
@@ -366,7 +366,7 @@ def _login(adresse, token):
             return (False)
     except Exception as E:
         print(E)
-
+        return (False)
 
 
 @app.route('/get_pseudo/', methods=['POST'])
@@ -579,6 +579,7 @@ def get_nb_personne(id_salle):
         nb = row[0][0]
     except IndexError as E:
         print(E, "GET NB PERSONNE, ROW = ", row)
+        print(f)
         return (-84)
     return (nb)
 
