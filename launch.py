@@ -393,7 +393,42 @@ def get_pseudo():
         return (pseudo)
     else:
         abort(405)
-        
+
+@app.route('/get_inventaire/', methods=['POST'])
+def get_inventaire():
+    try:
+        mail = request.form['adresse%mail']
+        token = request.form['token']
+        name_salle = request.form['name']
+    except Exception as E:
+        print (E)
+        abort(403)
+    id_salle = get_id_with_name(name_salle)
+    id_owner = get_id_with_mail(mail)
+    if (is_in_salle(name_salle, id_owner) == False):
+        print('Ce vilain méchant n\'est pas dans la salle :\'(')
+        abort (404)
+    f = "select inventaire from user where id = {}".format(str(id_owner))
+    row = execute_request(f)
+    if (row == False):
+        abort (403)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        abort (403)
+    s = result.split('|')
+    ok = False
+    for elem in s:
+        j = elem.split(':')
+        for i in j:
+            if ok == True:
+                print('i = ', i)
+                return (j)
+            if i == id_salle:
+                ok = True
+            
+
 #======================================================================================
 #=================================== SALLE PART =======================================
 #======================================================================================
@@ -461,6 +496,22 @@ def create_salle():
     print("Salle crée")
     return ("OK")
 
+def is_in_salle(name_salle, id_owner):
+    f = "select id_user from salle where name = '{}'".format(name_salle)
+    row = execute_request(f)
+    if (row == False):
+        print("False")
+        return (False)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        return (False)
+    s = result.split(',')
+    for elem in s:
+        if elem == str(id_owner):
+            return (True)
+    return (False)
 
 @app.route('/delete_salle', methods=['POST'])
 def delete_salle():
