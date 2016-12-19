@@ -401,15 +401,20 @@ def get_inventaire():
         mail = request.form['adresse%mail']
         token = request.form['token']
         name_salle = request.form['name']
+        inv_demande = request.form['name_inv']
     except Exception as E:
         print (E)
         abort(403)
     id_salle = get_id_with_name(name_salle)
     id_owner = get_id_with_mail(mail)
+    id_inv = get_id_with_mail(inv_demande)
     if (is_in_salle(name_salle, id_owner) == False):
         print('Ce vilain méchant n\'est pas dans la salle :\'(')
         abort (404)
-    f = "select inventaire from user where id = {}".format(str(id_owner))
+    if (is_in_salle(name_salle, id_inv) == False):
+        print('Ce vilain méchant n\'est pas dans la salle :\'(')
+        abort (404)    
+    f = "select inventaire from user where id = {}".format(str(id_inv))
     row = execute_request(f)
     if (row == False):
         abort (403)
@@ -677,7 +682,7 @@ def get_nb_personne(id_salle):
 
 def remove(id_owner, s):
     s = s.split(',')
-    s = liste(set(s))
+    s = list(set(s))
     return (','.join(s))
 
 def connexion_id_with_salle(id_owner, id_salle):
