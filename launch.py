@@ -463,7 +463,7 @@ def create_salle():
 
 
 @app.route('/delete_salle', methods=['POST'])
-def delete_salle:
+def delete_salle():
     try:
         adresse = request.form['adresse%mail']
         token = request.form['token']
