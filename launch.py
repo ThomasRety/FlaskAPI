@@ -394,6 +394,7 @@ def get_pseudo():
     else:
         abort(405)
 
+
 @app.route('/get_inventaire/', methods=['POST'])
 def get_inventaire():
     try:
@@ -416,7 +417,7 @@ def get_inventaire():
         result = row[0][0]
     except IndexError as E:
         print(E)
-        abort (403)
+        return ("errvide")
     s = result.split('|')
     ok = False
     for elem in s:
@@ -677,7 +678,7 @@ def get_nb_personne(id_salle):
 def remove(id_owner, s):
     s = s.split(',')
     s = liste(set(s))
-    return (''.join(s))
+    return (','.join(s))
 
 def connexion_id_with_salle(id_owner, id_salle):
     f = "select salle_id from user where id = {}".format(str(id_owner))
