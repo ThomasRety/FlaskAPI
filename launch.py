@@ -13,9 +13,9 @@ import hashlib
 import time
 import json
 
+
 app = Flask(__name__)
 cors = CORS(app, ressources={"/*":{"origins": "*"}})
-
 app.config.from_object(__name__)
 
 
@@ -461,6 +461,46 @@ def create_salle():
     print("Salle crée")
     return ("OK")
 
+
+@app.route('/delete_salle', methods=['POST'])
+def delete_salle:
+    try:
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+        name = request.form['name']
+        password = request.form['password']
+    except Exception as E:
+        print(E)
+        abort(403)
+    _log = _login(adresse, token)
+    if (log == False):
+        abort (403)
+    id_owner = get_id_with_mail(adresse)
+    f = "select id_owner from salle where name = '{}' and password = '{}'".format(name, password)
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        abort (403)
+    if (id_owner != result):
+        print("Tu n'es pas le proprio de la salle")
+        return ("errproprio")
+    f = "select id from salle where name = '{}' and password = '{}'".format(name, password)
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        abort (403)
+    f = "update user set id_salle = None where id_salle = {}".format(str(result))
+    row = execute_request(f)
+    return ("OK")
+
 @app.route('/get_my_salle/', methods=['POST'])
 def get_the_last_salle():
     try:
@@ -583,6 +623,11 @@ def get_nb_personne(id_salle):
         return (-84)
     return (nb)
 
+def remove(id_owner, s):
+    s = s.split(',')
+    s = liste(set(s))
+    return (''.join(s))
+
 def connexion_id_with_salle(id_owner, id_salle):
     f = "select salle_id from user where id = {}".format(str(id_owner))
     row = execute_request(f)
@@ -635,6 +680,7 @@ def connexion_id_with_salle(id_owner, id_salle):
     if s == "":
         s = s + str(id_owner)
     else:
+        s = remove(id_owner, s)
         s = s + ',' + str(id_owner)
     f = "update salle set id_user = '{}' where id = {}".format(str(s), str(id_salle))
     row = execute_request(f)
