@@ -497,7 +497,7 @@ def delete_salle:
     except IndexError as E:
         print(E)
         abort (403)
-    f = "update user set id_salle = None where id_salle = {}".format(str(result))
+    f = "update user set salle_id = None where salle_id = {}".format(str(result))
     row = execute_request(f)
     return ("OK")
 
@@ -513,7 +513,7 @@ def get_the_last_salle():
     if (log == False):
         abort (403)
     id_owner = get_id_with_mail(adresse)
-    f = "select id_salle from user where mail = '{}'".format(adresse)
+    f = "select salle_id from user where mail = '{}'".format(adresse)
     row = execute_request(f)
     if (row == False):
         abort(403)
@@ -537,7 +537,7 @@ def get_the_last_salle():
         except IndexError:
             print('VIDE')
             abort (404)
-            return (str(result))
+        return (str(result))
         
 @app.route('/connexion_with_salle', methods=['POST'])
 def connexion_with_salle():
