@@ -447,6 +447,17 @@ def formatage_row(row):
         s = s[0:len(s) - 1] + ';'
     return (s)
 
+def get_name_with_id(id):
+    f = "select name from user where id = {}".format(str(id))
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E, "get_name_with_id", str(id))
+        return (False)
+
 @app.route('/get_list_user/<name_salle>', methods=['POST'])
 def get_list_user(name_salle):
     f = "select id_user from salle where name = '{}'".format(str(name_salle))
@@ -454,7 +465,13 @@ def get_list_user(name_salle):
     if (row == False or len(row) == 0):
         print('row vide', row)
         abort (403)
-    s = formatage_row(row)
+    row = row[0]
+    s = ""
+    for elem in row:
+        if (s == ""):
+            s = get_name_with_id(elem)
+        else:
+            s = s + ',' + get_name_with_id(elem)
     return (s)
 
 @app.route('/get_salle/', methods=['GET'])
