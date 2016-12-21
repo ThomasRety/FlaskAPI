@@ -435,13 +435,15 @@ def get_inventaire():
     except IndexError as E:
         print(E)
         return ("errvide")
+    if (len(result) == 0):
+        return ("errvide")
     s = result.split('|')
     ok = False
     for elem in s:
         j = elem.split(':')
         for i in j:
             if ok == True:
-                print('i = ', i)
+                print('j = ', i)
                 return (j)
             if i == id_salle:
                 ok = True
