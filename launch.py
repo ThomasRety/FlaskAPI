@@ -447,8 +447,74 @@ def get_inventaire():
                 return (j)
             if i == id_salle:
                 ok = True
-            
 
+@app.route('/save_inventaire/', methods=['POST'])
+def save_inventaire():
+    try:
+        adresse = request.form['adresse%mail']
+        token = request.form['token']
+        name_inv_modif = request.form['name']
+        name_salle = request.form['name_salle']
+        inventaire = request.form['inventaire']
+    except Exception as E:
+        print(E)
+        abort(403)
+    log = _login(adresse, token)
+    if (log == False):
+        print("Tu n'est pas log")
+        abort(403)
+    id_salle = get_id_with_name(name_salle)
+    id_owner = get_id_with_mail(mail)
+    id_inv = get_id_with_name_user(name)
+    if (is_in_salle(name_salle, id_owner) == False):
+        print('Ce vilain owner n\'est pas dans la salle :\'(', str(id_owner))
+        abort(404)
+    if (is_in_salle(name_salle, id_inv) == False):
+        print('Ce vilain méchant n\'est pas dans la salle :\'(', str(id_inv))
+    f = "select inventaire from user where id = {}".format(str(id_inv))
+    row = execute_request(f)
+    if (row == False):
+        abort (403)
+    try:
+        result = row[0][0]
+    except IndexError as E:
+        print(E)
+        return ("errvide")
+    if (len(result) == 0):
+        return ("errvide")
+    s = result.split('|')
+    ok = False
+    o = 0
+    p = -1
+    for elem in s:
+        j = elem.split(':')
+        s[o] = j
+        #s = liste['id:inv', 'id:inv']
+        for i in j:
+            # j = liste['id', 'inv']
+            if ok == True:
+                print('j = ', i)
+                p = o
+            if i == id_salle:
+                ok = True
+        o = o + 1
+    if (p != -1):
+        s[o][1] = inventaire
+    else:
+        s.append(list(id_salle, inventaire))
+    print(s)
+    #ON REFORME DES STRINGS
+    string = ''
+    for elem in s:
+        string = string + str(elem[0]) + ':' + str(elem[1])
+        string = string + '|'
+    print(string)
+    f = "update user set inventaire = '{}' where id = {}".format(string, id_inv)
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    return ("OK")
+        
 #======================================================================================
 #=================================== SALLE PART =======================================
 #======================================================================================
