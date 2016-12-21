@@ -408,6 +408,7 @@ def get_inventaire():
     id_salle = get_id_with_name(name_salle)
     id_owner = get_id_with_mail(mail)
     id_inv = get_id_with_mail(inv_demande)
+    print(id_inv)
     print(inv_demande)
     if (is_in_salle(name_salle, id_owner) == False):
         print('Ce vilain owner n\'est pas dans la salle :\'(', str(id_owner))
