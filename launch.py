@@ -459,6 +459,15 @@ def get_name_with_id(id):
         return (False)
     return (result)
 
+@app.route('/get_all_library/', methods=['POST'])
+def get_all_library():
+    f = "select distinct categorie from objet"
+    row = execute_request(f)
+    if (row == False):
+        abort(403)
+    s = formatage_row(row)
+    return (s)
+
 @app.route('/get_list_user/<name_salle>', methods=['POST'])
 def get_list_user(name_salle):
     f = "select id_user from salle where name = '{}'".format(str(name_salle))
@@ -473,16 +482,13 @@ def get_list_user(name_salle):
     except IndexError as E:
         print(E, "get_list", row)
         abort (403)
-    print(row)
     for elem in row:
         if (s == ""):
             s = get_name_with_id(elem)
-            print("==================== ",s)
             if (s == False):
                 abort (403)
         else:
             e = get_name_with_id(elem)
-            print('================================ ', e)
             if (e == False):
                 abort (403)
             s = s + ',' + e
