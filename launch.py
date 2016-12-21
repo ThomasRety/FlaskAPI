@@ -48,6 +48,18 @@ def execute_request(f):
     conn.commit()
     return (row)
 
+def get_id_with_name_user(inv_demande):
+    f = "select id from user where pseudo = '{}'".format(inv_demande)
+    row = execute_request(f)
+    if (row == False):
+        return (False)
+    try:
+        result = row[0][0]
+        return (result)
+    except IndexError as E:
+        print(E)
+        return (False)
+
 def save_document(f, id_owner):
     try:
         a = "insert into image (name, id_owner) values('{}', {})".format(f.filename, str(id_owner))
@@ -407,9 +419,7 @@ def get_inventaire():
         abort(403)
     id_salle = get_id_with_name(name_salle)
     id_owner = get_id_with_mail(mail)
-    id_inv = get_id_with_mail(inv_demande)
-    print(id_inv)
-    print(inv_demande)
+    id_inv = get_id_with_name_user(inv_demande)
     if (is_in_salle(name_salle, id_owner) == False):
         print('Ce vilain owner n\'est pas dans la salle :\'(', str(id_owner))
         abort(404)
