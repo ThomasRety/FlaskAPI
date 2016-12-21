@@ -412,7 +412,7 @@ def get_inventaire():
         print('Ce vilain owner n\'est pas dans la salle :\'(', str(id_owner))
         abort(404)
     if (is_in_salle(name_salle, id_inv) == False):
-        print('Ce vilain méchant n\'est pas dans la salle :\'(', str(id_owner))
+        print('Ce vilain méchant n\'est pas dans la salle :\'(', str(id_inv))
         abort (404)
     f = "select inventaire from user where id = {}".format(str(id_inv))
     row = execute_request(f)
