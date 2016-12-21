@@ -435,7 +435,7 @@ def get_inventaire():
     except IndexError as E:
         print(E)
         return ("errvide")
-    if (len(result) == 0):
+    if (result == None or len(result) == 0):
         return ("errvide")
     s = result.split('|')
     ok = False
