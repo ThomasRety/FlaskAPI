@@ -248,11 +248,10 @@ def modif_login():
 def create_user():
     if (request.method == 'POST'):
         mail, passw = request.form['adresse%mail'], request.form['password']
-        passw = (hashlib.sha512(passw.encode())).hexdigest()
         user_name = request.form['username']
         if (len(mail) == 0 or len(passw) == 0 or len(user_name) == 0):
             print("Un des champs est manquant")
-            return("Un des champs est manquant")
+            return("errvarnull")
         f = '''select pseudo from user where mail = '{}' '''.format(mail)
         try:
             c.execute(f)
@@ -277,6 +276,7 @@ def create_user():
             print("ça existe déja")
             return ("errpseudo")
         else:
+            passw = (hashlib.sha512(passw.encode())).hexdigest()
             #Il n'y as pas de même nom d'user
             f = '''insert into user(password, pseudo, mail, token, date_inscription, date_naissance, question_secrete, reponse_secrete, telephone, ADMIN) values ('{}', '{}', '{}', '10', NULL, NULL, NULL, NULL, NULL, 0 )''' .format(passw, user_name, mail)
             try:
