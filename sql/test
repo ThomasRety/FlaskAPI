@@ -1,1 +1,0 @@
-CREATE TABLE user (password text, pseudo text, mail text, date_inscription varchar(255) NULL, date_naissance varchar(255) NULL, question_secrete varchar(255) NULL, reponse_secrete varhar(255) NULL, telephone integer NULL, id integer primary key autoincrement)

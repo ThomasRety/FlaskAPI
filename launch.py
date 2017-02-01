@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 import hashlib
 import time
 import json
+from werkzug.serving import WSGIRequestHandler
 
 
 app = Flask(__name__)
@@ -990,4 +991,5 @@ def get_the_user_with_user(user):
 
 if __name__ == "__main__":
     get_script()
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
     app.run("0.0.0.0")
