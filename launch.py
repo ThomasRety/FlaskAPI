@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 import hashlib
 import time
 import json
-from werkzug.serving import WSGIRequestHandler
+from werkzeug.serving import WSGIRequestHandler
 
 
 app = Flask(__name__)
