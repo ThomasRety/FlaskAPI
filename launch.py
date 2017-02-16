@@ -196,6 +196,9 @@ def get_image(id):
             return send_file(filename)
         except Exception as E:
             abort (403)
+    else:
+        print("Image is not valid {} ".format(str(id)))
+        abort(403)
 
 @app.route('/get_library/<name>' , methods=['POST'])
 def get_my_library(name):
