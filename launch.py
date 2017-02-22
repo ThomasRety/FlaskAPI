@@ -996,4 +996,4 @@ def get_the_user_with_user(user):
 if __name__ == "__main__":
     get_script()
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run("0.0.0.0", port=5000, debug=False, threaded=True)
+    app.run("0.0.0.0", port=5000, debug=False)
