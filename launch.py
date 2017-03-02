@@ -22,14 +22,14 @@ app.config.from_object(__name__)
 
 passwThomas = '5c92318242c515a45d23be7085ab2e494517a02db4a9d58ceae5e342a844d069a72253635a47ea5f210b662c21f98745261bd7b0a5bd5833c5332f6013f00af7'
 passwGuillaume = '9fe7a0518ec34d62fa601a605ccc3cf30a812146ea0e0a61e1d48f1de0cb433253b9ded9ebb83438354989452e42351046d55101304df82d242bce96eef8eadc'
-db = 'sql/real_data.db'
+db = '/home/ubuntu/FlaskAPI/sql/real_data.db'
 doc = 'test'
 
 conn = sqlite3.connect(db)
 c = conn.cursor()
 
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'sql/test_login.db'),
+    DATABASE=os.path.join(app.root_path, '/home/ubuntu/FlaskAPI/sql/test_login.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='admin'
@@ -100,7 +100,7 @@ def get_id_with_mail(adresse):
 
 def get_script():
     global ADMIN_TEXT
-    with open('tout.html', 'r') as f:
+    with open('/home/ubuntu/FlaskAPI/tout.html', 'r') as f:
         for line in f:
             ADMIN_TEXT += line
 
