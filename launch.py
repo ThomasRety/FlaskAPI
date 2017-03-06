@@ -14,7 +14,6 @@ import time
 import json
 from werkzeug.serving import WSGIRequestHandler
 
-
 app = Flask(__name__)
 cors = CORS(app, ressources={"/*":{"origins": "*"}})
 app.config.from_object(__name__)
@@ -996,4 +995,5 @@ def get_the_user_with_user(user):
 if __name__ == "__main__":
     get_script()
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
+#    app.run("0.0.0.0", port=5000, debug=False, ssl_context=('/home/ubuntu/FlaskAPI/https/servFlask.crt', '/home/ubuntu/FlaskAPI/https/servFlask.key'))
     app.run("0.0.0.0", port=5000, debug=False)
